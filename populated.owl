@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:reposteria="http://example.org/reposteria#"
+  xmlns:owl="http://www.w3.org/2002/07/owl#"
+>
+  <reposteria:Postre rdf:about="http://example.org/reposteria/Torpedo_dessert">
+    <rdfs:label xml:lang="es">Torpil</rdfs:label>
+    <reposteria:esTipicoDe xml:lang="es">Polonia</reposteria:esTipicoDe>
+    <reposteria:esTipicoDe xml:lang="es">Rumania</reposteria:esTipicoDe>
+    <reposteria:esTipicoDe xml:lang="es">Turquía</reposteria:esTipicoDe>
+    <reposteria:esTipicoDe xml:lang="es">Europa latina</reposteria:esTipicoDe>
+    <reposteria:esTipicoDe xml:lang="es">Bulgaria</reposteria:esTipicoDe>
+    <reposteria:esTipicoDe xml:lang="es">República Socialista de Rumania</reposteria:esTipicoDe>
+    <reposteria:esTipicoDe xml:lang="es">República Popular de Polonia</reposteria:esTipicoDe>
+    <reposteria:requiereIngrediente>
+      <reposteria:Ingrediente rdf:about="http://example.org/reposteria/Mantequilla">
+        <rdfs:label xml:lang="es">Mantequilla</rdfs:label>
+      </reposteria:Ingrediente>
+    </reposteria:requiereIngrediente>
+    <reposteria:requiereIngrediente>
+      <reposteria:Ingrediente rdf:about="http://example.org/reposteria/Levadura_de_panadería">
+        <rdfs:label xml:lang="es">Levadura de panadería</rdfs:label>
+      </reposteria:Ingrediente>
+    </reposteria:requiereIngrediente>
+  </reposteria:Postre>
+  <owl:ObjectProperty rdf:about="http://example.org/reposteria#requiereUtensilio">
+    <rdfs:domain rdf:resource="http://example.org/reposteria#Postre"/>
+    <rdfs:range rdf:resource="http://example.org/reposteria#Utensilio"/>
+  </owl:ObjectProperty>
+  <reposteria:Postre rdf:about="http://example.org/reposteria/Crêpes_Suzette">
+    <rdfs:label xml:lang="es">Crêpe Suzette</rdfs:label>
+    <reposteria:esTipicoDe xml:lang="es">Franca</reposteria:esTipicoDe>
+    <reposteria:esTipicoDe xml:lang="es">Francia</reposteria:esTipicoDe>
+    <reposteria:requiereIngrediente>
+      <reposteria:Ingrediente rdf:about="http://example.org/reposteria/Naranja_(fruta)">
+        <rdfs:label xml:lang="es">Naranja (fruta)</rdfs:label>
+      </reposteria:Ingrediente>
+    </reposteria:requiereIngrediente>
+    <reposteria:requiereIngrediente>
+      <reposteria:Ingrediente rdf:about="http://example.org/reposteria/Azúcar">
+        <rdfs:label xml:lang="es">Azúcar</rdfs:label>
+      </reposteria:Ingrediente>
+    </reposteria:requiereIngrediente>
+    <reposteria:requiereIngrediente rdf:resource="http://example.org/reposteria/Mantequilla"/>
+    <reposteria:requiereIngrediente>
+      <reposteria:Ingrediente rdf:about="http://example.org/reposteria/Triple_seco">
+        <rdfs:label xml:lang="es">Triple seco</rdfs:label>
+      </reposteria:Ingrediente>
+    </reposteria:requiereIngrediente>
+    <reposteria:requiereIngrediente>
+      <reposteria:Ingrediente rdf:about="http://example.org/reposteria/Cáscara_(ingrediente)">
+        <rdfs:label xml:lang="es">Cáscara (ingrediente)</rdfs:label>
+      </reposteria:Ingrediente>
+    </reposteria:requiereIngrediente>
+    <reposteria:requiereIngrediente>
+      <reposteria:Ingrediente rdf:about="http://example.org/reposteria/Citrus_×_tangerina">
+        <rdfs:label xml:lang="es">Citrus × tangerina</rdfs:label>
+      </reposteria:Ingrediente>
+    </reposteria:requiereIngrediente>
+    <reposteria:requiereIngrediente>
+      <reposteria:Ingrediente rdf:about="http://example.org/reposteria/Grand_Marnier">
+        <rdfs:label xml:lang="es">Grand Marnier</rdfs:label>
+      </reposteria:Ingrediente>
+    </reposteria:requiereIngrediente>
+    <reposteria:requiereIngrediente>
+      <reposteria:Ingrediente rdf:about="http://example.org/reposteria/Crep">
+        <rdfs:label xml:lang="es">Crep</rdfs:label>
+      </reposteria:Ingrediente>
+    </reposteria:requiereIngrediente>
+  </reposteria:Postre>
+  <reposteria:Postre rdf:about="http://example.org/reposteria/Semifreddo">
+    <rdfs:label xml:lang="es">Semifrío (gastronomía)</rdfs:label>
+    <reposteria:esTipicoDe xml:lang="es">Italia</reposteria:esTipicoDe>
+    <reposteria:requiereIngrediente>
+      <reposteria:Ingrediente rdf:about="http://example.org/reposteria/Crema_de_leche">
+        <rdfs:label xml:lang="es">Crema de leche</rdfs:label>
+      </reposteria:Ingrediente>
+    </reposteria:requiereIngrediente>
+    <reposteria:requiereIngrediente rdf:resource="http://example.org/reposteria/Azúcar"/>
+    <reposteria:requiereIngrediente>
+      <reposteria:Ingrediente rdf:about="http://example.org/reposteria/Yema_de_huevo">
+        <rdfs:label xml:lang="es">Yema de huevo</rdfs:label>
+      </reposteria:Ingrediente>
+    </reposteria:requiereIngrediente>
+  </reposteria:Postre>
+  <owl:ObjectProperty rdf:about="http://example.org/reposteria#esTipicoDe">
+    <rdfs:domain rdf:resource="http://example.org/reposteria#Postre"/>
+    <rdfs:range rdf:resource="http://example.org/reposteria#Pais"/>
+  </owl:ObjectProperty>
+  <reposteria:Postre rdf:about="http://example.org/reposteria/McIntosh_(apple)">
+    <rdfs:label xml:lang="es">McIntosh</rdfs:label>
+  </reposteria:Postre>
+  <reposteria:Postre rdf:about="http://example.org/reposteria/Chocolate_pizza">
+    <rdfs:label xml:lang="es">Pizza de chocolate</rdfs:label>
+  </reposteria:Postre>
+  <reposteria:Postre rdf:about="http://example.org/reposteria/Frozen_custard">
+    <rdfs:label xml:lang="es">Crema congelada</rdfs:label>
+    <reposteria:requiereIngrediente rdf:resource="http://example.org/reposteria/Crema_de_leche"/>
+    <reposteria:requiereIngrediente rdf:resource="http://example.org/reposteria/Yema_de_huevo"/>
+  </reposteria:Postre>
+  <owl:Ontology rdf:about="http://example.org/reposteria"/>
+  <reposteria:Postre rdf:about="http://example.org/reposteria/Cuajada">
+    <rdfs:label xml:lang="es">Cuajada</rdfs:label>
+    <reposteria:esTipicoDe xml:lang="es">España</reposteria:esTipicoDe>
+    <reposteria:esTipicoDe xml:lang="es">Estación España</reposteria:esTipicoDe>
+  </reposteria:Postre>
+  <owl:DatatypeProperty rdf:about="http://example.org/reposteria#tieneTiempoPreparacion">
+    <rdfs:domain rdf:resource="http://example.org/reposteria#Postre"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <reposteria:Postre rdf:about="http://example.org/reposteria/Peach_Melba">
+    <rdfs:label xml:lang="es">Pêche Melba</rdfs:label>
+    <reposteria:requiereIngrediente>
+      <reposteria:Ingrediente rdf:about="http://example.org/reposteria/Prunus_persica">
+        <rdfs:label xml:lang="es">Prunus persica</rdfs:label>
+      </reposteria:Ingrediente>
+    </reposteria:requiereIngrediente>
+    <reposteria:requiereIngrediente>
+      <reposteria:Ingrediente rdf:about="http://example.org/reposteria/Frambuesa">
+        <rdfs:label xml:lang="es">Frambuesa</rdfs:label>
+      </reposteria:Ingrediente>
+    </reposteria:requiereIngrediente>
+    <reposteria:requiereIngrediente>
+      <reposteria:Ingrediente rdf:about="http://example.org/reposteria/Vainilla">
+        <rdfs:label xml:lang="es">Vainilla</rdfs:label>
+      </reposteria:Ingrediente>
+    </reposteria:requiereIngrediente>
+  </reposteria:Postre>
+  <owl:NamedIndividual rdf:about="http://example.org/reposteria#Ejemplo_Torta">
+    <rdf:type rdf:resource="http://example.org/reposteria#Postre"/>
+    <rdfs:label xml:lang="es">Torta de Ejemplo</rdfs:label>
+    <rdfs:label xml:lang="en">Example Cake</rdfs:label>
+    <reposteria:tieneTiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PT01H30M</reposteria:tieneTiempoPreparacion>
+  </owl:NamedIndividual>
+  <reposteria:Postre rdf:about="http://example.org/reposteria/Fried_Coke">
+    <rdfs:label xml:lang="es">Coca Cola Frita</rdfs:label>
+    <reposteria:esTipicoDe xml:lang="es">Estados Unidos</reposteria:esTipicoDe>
+    <reposteria:requiereIngrediente>
+      <reposteria:Ingrediente rdf:about="http://example.org/reposteria/Coca-Cola">
+        <rdfs:label xml:lang="es">Coca-Cola</rdfs:label>
+      </reposteria:Ingrediente>
+    </reposteria:requiereIngrediente>
+    <reposteria:requiereIngrediente>
+      <reposteria:Ingrediente rdf:about="http://example.org/reposteria/Crema_batida">
+        <rdfs:label xml:lang="es">Crema batida</rdfs:label>
+      </reposteria:Ingrediente>
+    </reposteria:requiereIngrediente>
+    <reposteria:requiereIngrediente>
+      <reposteria:Ingrediente rdf:about="http://example.org/reposteria/Crema_chantillí">
+        <rdfs:label xml:lang="es">Crema chantillí</rdfs:label>
+      </reposteria:Ingrediente>
+    </reposteria:requiereIngrediente>
+    <reposteria:requiereIngrediente>
+      <reposteria:Ingrediente rdf:about="http://example.org/reposteria/Cereza">
+        <rdfs:label xml:lang="es">Cereza</rdfs:label>
+      </reposteria:Ingrediente>
+    </reposteria:requiereIngrediente>
+    <reposteria:requiereIngrediente>
+      <reposteria:Ingrediente rdf:about="http://example.org/reposteria/Rebozado">
+        <rdfs:label xml:lang="es">Rebozado</rdfs:label>
+      </reposteria:Ingrediente>
+    </reposteria:requiereIngrediente>
+  </reposteria:Postre>
+  <reposteria:Postre rdf:about="http://example.org/reposteria/Pionono">
+    <rdfs:label xml:lang="es">Pionono</rdfs:label>
+    <reposteria:esTipicoDe xml:lang="es">España</reposteria:esTipicoDe>
+    <reposteria:esTipicoDe xml:lang="es">Estación España</reposteria:esTipicoDe>
+  </reposteria:Postre>
+  <owl:ObjectProperty rdf:about="http://example.org/reposteria#requiereIngrediente">
+    <rdfs:domain rdf:resource="http://example.org/reposteria#Postre"/>
+    <rdfs:range rdf:resource="http://example.org/reposteria#Ingrediente"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:about="http://example.org/reposteria#tieneCalorias">
+    <rdfs:domain rdf:resource="http://example.org/reposteria#Postre"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </owl:DatatypeProperty>
+  <reposteria:Postre rdf:about="http://example.org/reposteria/Pirouline">
+    <rdfs:label xml:lang="es">Pirouline</rdfs:label>
+  </reposteria:Postre>
+  <owl:ObjectProperty rdf:about="http://example.org/reposteria#usaTecnica">
+    <rdfs:domain rdf:resource="http://example.org/reposteria#Postre"/>
+    <rdfs:range rdf:resource="http://example.org/reposteria#Tecnica"/>
+  </owl:ObjectProperty>
+  <owl:Class rdf:about="http://example.org/reposteria#CategoriaIngrediente"/>
+  <reposteria:Postre rdf:about="http://example.org/reposteria/Stir-fried_ice_cream">
+    <rdfs:label xml:lang="es">Helado a la plancha</rdfs:label>
+  </reposteria:Postre>
+  <owl:Class rdf:about="http://example.org/reposteria#Tecnica"/>
+  <owl:Class rdf:about="http://example.org/reposteria#Pais"/>
+  <owl:Class rdf:about="http://example.org/reposteria#Utensilio"/>
+  <owl:Class rdf:about="http://example.org/reposteria#Ingrediente"/>
+  <owl:Class rdf:about="http://example.org/reposteria#Postre"/>
+</rdf:RDF>

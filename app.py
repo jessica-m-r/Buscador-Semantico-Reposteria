@@ -1,78 +1,64 @@
-from flask import Flask, render_template, request, redirect, url_for
-from rdflib import Graph, Namespace, RDF, RDFS, Literal
+from flask import Flask, render_template, request
+from rdflib import Graph, RDFS, RDF, Namespace, URIRef, Literal
 
 app = Flask(__name__)
 
-# --- Cargar ontología local ---
+# Carga de la ontología local
 g = Graph()
-g.parse("populated.owl", format="xml")
-NS = Namespace("http://example.org/reposteria#")
-g.bind("rdfs", RDFS)
+g.parse("reposteria.rdf", format="xml")  # Ajusta el nombre de tu archivo RDF
 
-# --- Función de búsqueda en ontología ---
-def search_local(term, lang="es", qtype="name"):
-    results = []
+# Namespace principal de tu ontología
+NS = Namespace("http://www.semanticweb.org/ontologies/reposteria#")
+
+# Función para obtener todas las subclases recursivamente
+def get_all_subclasses(cls):
+    subclasses = set()
+    for sub in g.subjects(RDFS.subClassOf, cls):
+        subclasses.add(sub)
+        subclasses |= get_all_subclasses(sub)
+    return subclasses
+
+# Función para buscar productos por término (ignora mayúsculas)
+def search_products(term):
     term_lower = term.lower()
-    
-    for postre in g.subjects(RDF.type, NS.Postre):
-        # etiquetas
-        labels = [str(l) for l in g.objects(postre, RDFS.label)]
-        label_match = any(term_lower in l.lower() for l in labels)
-        
-        # abstracción y país
-        abstract = g.value(postre, NS.abstract)
-        abstract_text = str(abstract) if abstract else ""
-        countries = [str(c) for c in g.objects(postre, NS.esTipicoDe)]
-        
-        # ingredientes, técnicas, utensilios
-        ingredients = [{"uri": str(i), "label": str(g.value(i, RDFS.label) or i)} 
-                       for i in g.objects(postre, NS.requiereIngrediente)]
-        techniques = [{"uri": str(t), "label": str(g.value(t, RDFS.label) or t)} 
-                       for t in g.objects(postre, NS.usaTecnica)]
-        utensils = [{"uri": str(u), "label": str(g.value(u, RDFS.label) or u)} 
-                    for u in g.objects(postre, NS.requiereUtensilio)]
-        
-        # cal, tiempo
-        calories = g.value(postre, NS.tieneCalorias)
-        time = g.value(postre, NS.tieneTiempoPreparacion)
-        
-        # filtro de búsqueda
-        match = False
-        if qtype == "name" and label_match:
-            match = True
-        elif qtype == "ingredient" and any(term_lower in i['label'].lower() for i in ingredients):
-            match = True
-        elif qtype == "country" and any(term_lower in c.lower() for c in countries):
-            match = True
-        
-        if match:
-            results.append({
-                "uri": str(postre),
-                "label": labels[0] if labels else str(postre),
-                "abstract": abstract_text,
-                "country": ", ".join(countries),
-                "ingredients": ingredients,
-                "techniques": techniques,
-                "utensils": utensils,
-                "calories": str(calories) if calories else "",
-                "time": str(time) if time else ""
-            })
+    results = []
+
+    # Obtenemos todas las subclases de Producto
+    product_classes = {NS.Producto} | get_all_subclasses(NS.Producto)
+
+    for prod in g.subjects(RDF.type, None):
+        # Verificamos si la instancia es de una subclase de Producto
+        if any((prod, RDF.type, cls) in g for cls in product_classes):
+            # Intentamos obtener el nombre, primero con propiedad nombre
+            nombre = g.value(prod, NS.nombre)
+            if nombre is None:
+                # Si no hay NS.nombre, buscamos cualquier literal dentro de la instancia
+                for obj in g.objects(prod, None):
+                    if isinstance(obj, Literal):
+                        nombre = obj
+                        break
+            if nombre and term_lower in str(nombre).lower():
+                # Recolectamos ingredientes, técnicas y herramientas
+                ingredientes = [str(i.split("#")[-1]) for i in g.objects(prod, NS.tieneIngrediente)]
+                tecnicas = [str(t.split("#")[-1]) for t in g.objects(prod, NS.requiereTecnica)]
+                herramientas = [str(h.split("#")[-1]) for h in g.objects(prod, NS.usaHerramienta)]
+
+                results.append({
+                    "nombre": str(nombre),
+                    "ingredientes": ingredientes,
+                    "tecnicas": tecnicas,
+                    "herramientas": herramientas
+                })
     return results
 
-# --- Ruta principal ---
 @app.route("/", methods=["GET", "POST"])
 def index():
+    results = []
     if request.method == "POST":
-        term = request.form.get("term", "").strip()
-        qtype = request.form.get("qtype", "name")
-
-        if not term:
-            return redirect(url_for("index"))
-
-        results = search_local(term, qtype)
-        return render_template("results.html", items=results, term=term, qtype=qtype)
-
-    return render_template("index.html")
+        term = request.form.get("term")
+        if term:
+            results = search_products(term)
+    return render_template("results.html", results=results)
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True)

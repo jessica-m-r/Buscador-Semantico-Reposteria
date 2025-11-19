@@ -1,0 +1,1584 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/ontologies/reposteria#"
+     xml:base="http://www.semanticweb.org/ontologies/reposteria"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/ontologies/reposteria"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#combinaBienCon -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#combinaBienCon">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Ingrediente"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Ingrediente"/>
+        <rdfs:label>combina bien con</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#contiene -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#contiene">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#esParteDe"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:comment>Un producto puede contener otro producto como parte</rdfs:comment>
+        <rdfs:label>contiene</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#esIngredienteDe -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#esIngredienteDe">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#tieneIngrediente"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Ingrediente"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:label>es ingrediente de</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#esParteDe -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#esParteDe">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:label>es parte de</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#esRequeridaPor -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#esRequeridaPor">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#requiereTecnica"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Tecnica"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:label>es requerida por</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#esUsadaPor -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#esUsadaPor">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#usaHerramienta"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Herramienta"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:label>es usada por</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#herramientaIndispensable -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#herramientaIndispensable">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#usaHerramienta"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Herramienta"/>
+        <rdfs:label>herramienta indispensable</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#incompatibleCon -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#incompatibleCon">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Ingrediente"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Ingrediente"/>
+        <rdfs:label>incompatible con</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#ingredienteOpcional -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#ingredienteOpcional">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#tieneIngrediente"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Ingrediente"/>
+        <rdfs:label>ingrediente opcional</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#ingredientePrincipal -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#ingredientePrincipal">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#tieneIngrediente"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Ingrediente"/>
+        <rdfs:label>ingrediente principal</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#requiereTecnica -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#requiereTecnica">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Tecnica"/>
+        <rdfs:label>requiere tecnica</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#tecnicaPrincipal -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#tecnicaPrincipal">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#requiereTecnica"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Tecnica"/>
+        <rdfs:label>tecnica principal</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#tieneIngrediente -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#tieneIngrediente">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Ingrediente"/>
+        <rdfs:label>tiene ingrediente</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#usaHerramienta -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#usaHerramienta">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Herramienta"/>
+        <rdfs:label>usa herramienta</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#azucarGramos -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#azucarGramos">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+        <rdfs:label>azucar (gramos)</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#calorias -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#calorias">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:label>calorias por porcion</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#cantidad -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#cantidad">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Ingrediente"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Cantidad con unidad de medida (ej: 200g, 2 tazas)</rdfs:comment>
+        <rdfs:label>cantidad</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#color -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#color">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label>color</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#costoAproximado -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#costoAproximado">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+        <rdfs:label>costo aproximado</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#descripcion -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#descripcion">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Reposteria"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label>descripcion</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#esCongelable -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#esCongelable">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+        <rdfs:label>es congelable</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#esTradicional -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#esTradicional">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+        <rdfs:label>es receta tradicional</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#esVegano -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#esVegano">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+        <rdfs:label>es vegano</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#grasaGramos -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#grasaGramos">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+        <rdfs:label>grasa (gramos)</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#nivelDificultad -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#nivelDificultad">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Valores: Facil, Medio, Dificil</rdfs:comment>
+        <rdfs:label>nivel de dificultad</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#nivelHabilidad -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#nivelHabilidad">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Tecnica"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label>nivel de habilidad requerido</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#nombre -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#nombre">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Reposteria"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label>nombre</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#paisOrigen -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#paisOrigen">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label>pais de origen</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#peso -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#peso">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:label>peso (gramos)</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#porciones -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#porciones">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:label>porciones</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#requiereRefrigeracion -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#requiereRefrigeracion">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+        <rdfs:label>requiere refrigeracion</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#sabor -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#sabor">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label>sabor</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#temperatura -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#temperatura">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:label>temperatura (grados Celsius)</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#temperaturaMaxima -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#temperaturaMaxima">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:label>temperatura maxima</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#temperaturaMinima -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#temperaturaMinima">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:label>temperatura minima</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#textura -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#textura">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Ejemplos: cremoso, crujiente, esponjoso, suave</rdfs:comment>
+        <rdfs:label>textura</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#tiempoCoccion -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#tiempoCoccion">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:label>tiempo de coccion (minutos)</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#tiempoConservacion -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#tiempoConservacion">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:label>tiempo de conservacion (dias)</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#tiempoPreparacion -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#tiempoPreparacion">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment>Tiempo total de preparacion en minutos</rdfs:comment>
+        <rdfs:label>tiempo de preparacion (minutos)</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#tiempoReposo -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#tiempoReposo">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:label>tiempo de reposo (minutos)</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#tieneGluten -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#tieneGluten">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+        <rdfs:label>contiene gluten</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#tieneLactosa -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ontologies/reposteria#tieneLactosa">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+        <rdfs:label>contiene lactosa</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Aditivo -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#Aditivo">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Ingrediente"/>
+        <rdfs:label>Aditivo</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Animal -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#Animal">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Ingrediente"/>
+        <rdfs:label>Animal</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Batido -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#Batido">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Tecnica"/>
+        <rdfs:label>Batido</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Batidora -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#Batidora">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Herramienta"/>
+        <rdfs:label>Batidora</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Confiteria -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#Confiteria">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:label>Confiteria</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Galleta -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#Galleta">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:label>Galleta</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Glaseado -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#Glaseado">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Tecnica"/>
+        <rdfs:label>Glaseado</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Herramienta -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#Herramienta">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Reposteria"/>
+        <rdfs:label>Herramienta</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Horneado -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#Horneado">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Tecnica"/>
+        <rdfs:label>Horneado</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Horno -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#Horno">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Herramienta"/>
+        <rdfs:label>Horno</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Ingrediente -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#Ingrediente">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Reposteria"/>
+        <rdfs:label>Ingrediente</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#MangaPastelera -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#MangaPastelera">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Herramienta"/>
+        <rdfs:label>Manga Pastelera</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Masa -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#Masa">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:label>Masa</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Molde -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#Molde">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Herramienta"/>
+        <rdfs:label>Molde</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Pastel -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#Pastel">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:label>Pastel</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#PostreDeCuchara -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#PostreDeCuchara">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Producto"/>
+        <rdfs:label>Postre de Cuchara</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Producto -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#Producto">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Reposteria"/>
+        <rdfs:label>Producto</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Refrigerado -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#Refrigerado">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Tecnica"/>
+        <rdfs:label>Refrigerado</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Reposteria -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#Reposteria">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+        <rdfs:label>Reposteria</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Tecnica -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#Tecnica">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Reposteria"/>
+        <rdfs:label>Tecnica</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Vegetal -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ontologies/reposteria#Vegetal">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Ingrediente"/>
+        <rdfs:label>Vegetal</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Almendras -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Almendras">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
+        <descripcion>Fruto seco molido o fileteado</descripcion>
+        <nombre>Almendras</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Azucar -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Azucar">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
+        <combinaBienCon rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
+        <descripcion>Azucar blanca refinada</descripcion>
+        <nombre>Azucar</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Batidora"/>
+        <descripcion>Batidora electrica de pie o mano</descripcion>
+        <nombre>Batidora Electrica</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Bicarbonato -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Bicarbonato">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Aditivo"/>
+        <descripcion>Agente leudante</descripcion>
+        <nombre>Bicarbonato</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#BizcochoSimple -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#BizcochoSimple">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Pastel"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaBatido"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaHorneado"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Azucar"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Harina"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Levadura"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MoldeRedondo"/>
+        <nivelDificultad>Facil</nivelDificultad>
+        <nombre>Bizcocho Simple</nombre>
+        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</porciones>
+        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">180</temperatura>
+        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">50</tiempoPreparacion>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#BrownieChocolate -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#BrownieChocolate">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Pastel"/>
+        <herramientaIndispensable rdf:resource="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional"/>
+        <ingredienteOpcional rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Nueces"/>
+        <ingredientePrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Chocolate"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaBatido"/>
+        <tecnicaPrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaHorneado"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Azucar"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Harina"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MoldeRedondo"/>
+        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">28.5</azucarGramos>
+        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">320</calorias>
+        <color>Marrón oscuro</color>
+        <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">8.50</costoAproximado>
+        <descripcion>Brownie denso y chocolatoso con nueces</descripcion>
+        <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esCongelable>
+        <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
+        <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
+        <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">18.2</grasaGramos>
+        <nivelDificultad>Facil</nivelDificultad>
+        <nombre>Brownie de Chocolate</nombre>
+        <paisOrigen>Estados Unidos</paisOrigen>
+        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">800</peso>
+        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">12</porciones>
+        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</requiereRefrigeracion>
+        <sabor>Chocolate intenso</sabor>
+        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">180</temperatura>
+        <textura>Denso y húmedo</textura>
+        <tiempoCoccion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</tiempoCoccion>
+        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</tiempoConservacion>
+        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">45</tiempoPreparacion>
+        <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneGluten>
+        <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneLactosa>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Cafe -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Cafe">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
+        <descripcion>Cafe soluble o espresso</descripcion>
+        <nombre>Cafe</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Canela -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Canela">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Aditivo"/>
+        <descripcion>Especia aromática</descripcion>
+        <nombre>Canela</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#CheesecakeClasico -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#CheesecakeClasico">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Pastel"/>
+        <herramientaIndispensable rdf:resource="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional"/>
+        <ingredientePrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Queso"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaBatido"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaRefrigerado"/>
+        <tecnicaPrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaHorneado"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Azucar"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Nata"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MoldeRedondo"/>
+        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">32.0</azucarGramos>
+        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">420</calorias>
+        <color>Blanco cremoso</color>
+        <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">18.00</costoAproximado>
+        <descripcion>Tarta de queso horneada con base de galleta</descripcion>
+        <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esCongelable>
+        <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
+        <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
+        <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">28.5</grasaGramos>
+        <nivelDificultad>Medio</nivelDificultad>
+        <nombre>Cheesecake Clasico</nombre>
+        <paisOrigen>Estados Unidos</paisOrigen>
+        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1300</peso>
+        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</porciones>
+        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</requiereRefrigeracion>
+        <sabor>Queso suave</sabor>
+        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">165</temperatura>
+        <textura>Cremoso y denso</textura>
+        <tiempoCoccion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">60</tiempoCoccion>
+        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</tiempoConservacion>
+        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90</tiempoPreparacion>
+        <tiempoReposo rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">480</tiempoReposo>
+        <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneGluten>
+        <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneLactosa>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Chocolate -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Chocolate">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
+        <combinaBienCon rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Leche"/>
+        <combinaBienCon rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Nata"/>
+        <descripcion>Chocolate oscuro o semiamargo</descripcion>
+        <nombre>Chocolate</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Coco -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Coco">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
+        <descripcion>Rallado o en hojuelas</descripcion>
+        <nombre>Coco</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#ColoranteRojo -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#ColoranteRojo">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Aditivo"/>
+        <descripcion>Colorante alimentario</descripcion>
+        <nombre>Colorante Rojo</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#CupcakesVainilla -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#CupcakesVainilla">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Pastel"/>
+        <herramientaIndispensable rdf:resource="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional"/>
+        <ingredientePrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Harina"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaBatido"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaGlaseado"/>
+        <tecnicaPrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaHorneado"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Azucar"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#EsenciaVainilla"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Leche"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Levadura"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MangaPastelera01"/>
+        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">38.0</azucarGramos>
+        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">305</calorias>
+        <color>Amarillo claro</color>
+        <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">10.00</costoAproximado>
+        <descripcion>Pequeños pasteles individuales con frosting</descripcion>
+        <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esCongelable>
+        <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
+        <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
+        <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">14.0</grasaGramos>
+        <nivelDificultad>Facil</nivelDificultad>
+        <nombre>Cupcakes de Vainilla</nombre>
+        <paisOrigen>Estados Unidos</paisOrigen>
+        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">600</peso>
+        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">12</porciones>
+        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</requiereRefrigeracion>
+        <sabor>Vainilla dulce</sabor>
+        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">175</temperatura>
+        <textura>Esponjoso</textura>
+        <tiempoCoccion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</tiempoCoccion>
+        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</tiempoConservacion>
+        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">50</tiempoPreparacion>
+        <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneGluten>
+        <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneLactosa>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#EsenciaVainilla -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#EsenciaVainilla">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Aditivo"/>
+        <descripcion>Extracto concentrado de vainilla</descripcion>
+        <nombre>Esencia de Vainilla</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#FlanLeche -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#FlanLeche">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#PostreDeCuchara"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaHorneado"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaRefrigerado"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Azucar"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Leche"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MoldeRedondo"/>
+        <nivelDificultad>Medio</nivelDificultad>
+        <nombre>Flan de Leche</nombre>
+        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</porciones>
+        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">160</temperatura>
+        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">60</tiempoPreparacion>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Fresas -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Fresas">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
+        <descripcion>Fruta fresca</descripcion>
+        <nombre>Fresas</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#GalletasChocolate -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#GalletasChocolate">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Galleta"/>
+        <herramientaIndispensable rdf:resource="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional"/>
+        <ingredientePrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Harina"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaBatido"/>
+        <tecnicaPrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaHorneado"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Azucar"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Chocolate"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
+        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">12.5</azucarGramos>
+        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">140</calorias>
+        <color>Marrón</color>
+        <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">7.00</costoAproximado>
+        <descripcion>Galletas con chips de chocolate</descripcion>
+        <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esCongelable>
+        <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
+        <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
+        <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">7.0</grasaGramos>
+        <nivelDificultad>Facil</nivelDificultad>
+        <nombre>Galletas de Chocolate</nombre>
+        <paisOrigen>Estados Unidos</paisOrigen>
+        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">500</peso>
+        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</porciones>
+        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</requiereRefrigeracion>
+        <sabor>Chocolate dulce</sabor>
+        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">175</temperatura>
+        <textura>Crujiente por fuera, suave por dentro</textura>
+        <tiempoCoccion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15</tiempoCoccion>
+        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</tiempoConservacion>
+        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">35</tiempoPreparacion>
+        <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneGluten>
+        <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneLactosa>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#GalletasVainilla -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#GalletasVainilla">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Galleta"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaBatido"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaHorneado"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Azucar"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#EsenciaVainilla"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Harina"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional"/>
+        <nivelDificultad>Facil</nivelDificultad>
+        <nombre>Galletas de Vainilla</nombre>
+        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">24</porciones>
+        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">170</temperatura>
+        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</tiempoPreparacion>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Harina -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Harina">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
+        <combinaBienCon rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
+        <descripcion>Harina de trigo todo uso</descripcion>
+        <nombre>Harina</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#HornoConvencional -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Horno"/>
+        <descripcion>Horno electrico o a gas</descripcion>
+        <nombre>Horno Convencional</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Huevo -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Huevo">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Animal"/>
+        <combinaBienCon rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Azucar"/>
+        <combinaBienCon rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Harina"/>
+        <descripcion>Huevo fresco de gallina</descripcion>
+        <nombre>Huevo</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Leche -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Leche">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Animal"/>
+        <combinaBienCon rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Chocolate"/>
+        <descripcion>Leche entera fresca</descripcion>
+        <nombre>Leche</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Levadura -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Levadura">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Aditivo"/>
+        <descripcion>Polvo para hornear</descripcion>
+        <nombre>Levadura</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Limon -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Limon">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
+        <descripcion>Citrico para sabor y decoracion</descripcion>
+        <nombre>Limon</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Macarons -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Macarons">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Confiteria"/>
+        <herramientaIndispensable rdf:resource="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional"/>
+        <ingredientePrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#PolvoDeAlmendras"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaBatido"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaRefrigerado"/>
+        <tecnicaPrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaHorneado"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Azucar"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MangaPastelera01"/>
+        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">10.0</azucarGramos>
+        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">80</calorias>
+        <color>Variado</color>
+        <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">20.00</costoAproximado>
+        <descripcion>Galletas francesas de almendra con relleno</descripcion>
+        <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esCongelable>
+        <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
+        <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
+        <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">3.5</grasaGramos>
+        <nivelDificultad>Dificil</nivelDificultad>
+        <nombre>Macarons</nombre>
+        <paisOrigen>Francia</paisOrigen>
+        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">450</peso>
+        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</porciones>
+        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</requiereRefrigeracion>
+        <sabor>Almendra dulce</sabor>
+        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">150</temperatura>
+        <textura>Crujiente por fuera, suave por dentro</textura>
+        <tiempoCoccion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15</tiempoCoccion>
+        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</tiempoConservacion>
+        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">120</tiempoPreparacion>
+        <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</tieneGluten>
+        <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</tieneLactosa>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#MangaPastelera01 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#MangaPastelera01">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MangaPastelera"/>
+        <descripcion>Bolsa con boquillas para decorar</descripcion>
+        <nombre>Manga Pastelera</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Mantequilla -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Mantequilla">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Animal"/>
+        <combinaBienCon rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Harina"/>
+        <descripcion>Mantequilla sin sal</descripcion>
+        <nombre>Mantequilla</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Manzana -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Manzana">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
+        <descripcion>Fruta para rellenos</descripcion>
+        <nombre>Manzana</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#MasaHojaldre -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#MasaHojaldre">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Masa"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaRefrigerado"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Harina"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
+        <nivelDificultad>Dificil</nivelDificultad>
+        <nombre>Masa Hojaldre</nombre>
+        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">120</tiempoPreparacion>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#MoldeRedondo -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#MoldeRedondo">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Molde"/>
+        <descripcion>Molde redondo de 20-24 cm</descripcion>
+        <nombre>Molde Redondo</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#MousseChocolate -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#MousseChocolate">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#PostreDeCuchara"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaBatido"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaRefrigerado"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Azucar"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Chocolate"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
+        <nivelDificultad>Medio</nivelDificultad>
+        <nombre>Mousse de Chocolate</nombre>
+        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</porciones>
+        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</tiempoPreparacion>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Naranja -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Naranja">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
+        <descripcion>Citrico para sabor</descripcion>
+        <nombre>Naranja</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Nata -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Nata">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Animal"/>
+        <combinaBienCon rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Chocolate"/>
+        <descripcion>Crema de leche para montar</descripcion>
+        <nombre>Nata</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Nueces -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Nueces">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
+        <descripcion>Fruto seco</descripcion>
+        <nombre>Nueces</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#PanPlatano -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#PanPlatano">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Pastel"/>
+        <herramientaIndispensable rdf:resource="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional"/>
+        <ingredientePrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Platano"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaBatido"/>
+        <tecnicaPrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaHorneado"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Azucar"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Harina"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Levadura"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
+        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">22.0</azucarGramos>
+        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">250</calorias>
+        <color>Marrón dorado</color>
+        <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">5.50</costoAproximado>
+        <descripcion>Bizcocho humedo con platano maduro</descripcion>
+        <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esCongelable>
+        <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
+        <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
+        <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">9.5</grasaGramos>
+        <nivelDificultad>Facil</nivelDificultad>
+        <nombre>Pan de Platano</nombre>
+        <paisOrigen>Estados Unidos</paisOrigen>
+        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">900</peso>
+        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</porciones>
+        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</requiereRefrigeracion>
+        <sabor>Platano dulce</sabor>
+        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">175</temperatura>
+        <textura>Húmedo y esponjoso</textura>
+        <tiempoCoccion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">55</tiempoCoccion>
+        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</tiempoConservacion>
+        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">60</tiempoPreparacion>
+        <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneGluten>
+        <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneLactosa>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#PastelChocolateGlaseado -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#PastelChocolateGlaseado">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Pastel"/>
+        <herramientaIndispensable rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
+        <ingredientePrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Chocolate"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaBatido"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaGlaseado"/>
+        <tecnicaPrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaHorneado"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Azucar"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Harina"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Leche"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Levadura"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MoldeRedondo"/>
+        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">45.0</azucarGramos>
+        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">380</calorias>
+        <color>Marrón oscuro</color>
+        <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">14.00</costoAproximado>
+        <descripcion>Pastel de chocolate con cobertura brillante</descripcion>
+        <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esCongelable>
+        <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
+        <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
+        <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">18.0</grasaGramos>
+        <nivelDificultad>Medio</nivelDificultad>
+        <nombre>Pastel de Chocolate con Glaseado</nombre>
+        <paisOrigen>Alemania</paisOrigen>
+        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1400</peso>
+        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">12</porciones>
+        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</requiereRefrigeracion>
+        <sabor>Chocolate rico</sabor>
+        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">180</temperatura>
+        <textura>Esponjoso y húmedo</textura>
+        <tiempoCoccion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">45</tiempoCoccion>
+        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</tiempoConservacion>
+        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</tiempoPreparacion>
+        <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneGluten>
+        <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneLactosa>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#PastelVainilla -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#PastelVainilla">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Pastel"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaBatido"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaGlaseado"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaHorneado"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Azucar"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#EsenciaVainilla"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Harina"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Leche"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Levadura"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MoldeRedondo"/>
+        <nivelDificultad>Medio</nivelDificultad>
+        <nombre>Pastel de Vainilla</nombre>
+        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</porciones>
+        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">175</temperatura>
+        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90</tiempoPreparacion>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Platano -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Platano">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
+        <descripcion>Fruta madura para reposteria</descripcion>
+        <nombre>Platano</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#PolvoDeAlmendras -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#PolvoDeAlmendras">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
+        <descripcion>Almendras molidas finamente</descripcion>
+        <nombre>Polvo de Almendras</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Queso -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Queso">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Animal"/>
+        <descripcion>Queso crema tipo Philadelphia</descripcion>
+        <nombre>Queso Crema</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#TartaLimon -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#TartaLimon">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Pastel"/>
+        <herramientaIndispensable rdf:resource="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional"/>
+        <ingredientePrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Limon"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaBatido"/>
+        <tecnicaPrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaHorneado"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Azucar"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Harina"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MoldeRedondo"/>
+        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">42.0</azucarGramos>
+        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">340</calorias>
+        <color>Amarillo brillante</color>
+        <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">11.00</costoAproximado>
+        <descripcion>Tarta citrica con merengue</descripcion>
+        <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esCongelable>
+        <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
+        <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
+        <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">15.0</grasaGramos>
+        <nivelDificultad>Medio</nivelDificultad>
+        <nombre>Tarta de Limon</nombre>
+        <paisOrigen>Reino Unido</paisOrigen>
+        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">850</peso>
+        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</porciones>
+        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</requiereRefrigeracion>
+        <sabor>Citrico y dulce</sabor>
+        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">170</temperatura>
+        <textura>Cremoso y crujiente</textura>
+        <tiempoCoccion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">35</tiempoCoccion>
+        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</tiempoConservacion>
+        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">75</tiempoPreparacion>
+        <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneGluten>
+        <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneLactosa>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#TartaManzana -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#TartaManzana">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Pastel"/>
+        <herramientaIndispensable rdf:resource="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional"/>
+        <ingredientePrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Manzana"/>
+        <tecnicaPrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaHorneado"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Azucar"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Canela"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Harina"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MoldeRedondo"/>
+        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">35.0</azucarGramos>
+        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">290</calorias>
+        <color>Dorado</color>
+        <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">9.00</costoAproximado>
+        <descripcion>Tarta clasica con manzanas y canela</descripcion>
+        <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esCongelable>
+        <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
+        <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
+        <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">12.0</grasaGramos>
+        <nivelDificultad>Medio</nivelDificultad>
+        <nombre>Tarta de Manzana</nombre>
+        <paisOrigen>Estados Unidos</paisOrigen>
+        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1100</peso>
+        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</porciones>
+        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</requiereRefrigeracion>
+        <sabor>Manzana con canela</sabor>
+        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">180</temperatura>
+        <textura>Crujiente y jugoso</textura>
+        <tiempoCoccion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">50</tiempoCoccion>
+        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</tiempoConservacion>
+        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">70</tiempoPreparacion>
+        <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneGluten>
+        <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneLactosa>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#TecnicaBatido -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#TecnicaBatido">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Batido"/>
+        <descripcion>Mezclar ingredientes vigorosamente para incorporar aire</descripcion>
+        <nivelHabilidad>Basico</nivelHabilidad>
+        <nombre>Tecnica de Batido</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#TecnicaGlaseado -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#TecnicaGlaseado">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Glaseado"/>
+        <descripcion>Aplicacion de cobertura decorativa</descripcion>
+        <nivelHabilidad>Avanzado</nivelHabilidad>
+        <nombre>Tecnica de Glaseado</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#TecnicaHorneado -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#TecnicaHorneado">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Horneado"/>
+        <descripcion>Coccion en horno a temperatura controlada</descripcion>
+        <nivelHabilidad>Intermedio</nivelHabilidad>
+        <nombre>Tecnica de Horneado</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#TecnicaRefrigerado -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#TecnicaRefrigerado">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Refrigerado"/>
+        <descripcion>Enfriamiento en refrigerador para solidificar</descripcion>
+        <nivelHabilidad>Basico</nivelHabilidad>
+        <nombre>Tecnica de Refrigerado</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Tiramisu -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Tiramisu">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#PostreDeCuchara"/>
+        <ingredientePrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Queso"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaBatido"/>
+        <tecnicaPrincipal rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaRefrigerado"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Azucar"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Cafe"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
+        <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
+        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">24.0</azucarGramos>
+        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">310</calorias>
+        <color>Marrón claro</color>
+        <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">15.00</costoAproximado>
+        <descripcion>Postre italiano con cafe y mascarpone</descripcion>
+        <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esCongelable>
+        <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
+        <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
+        <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">18.5</grasaGramos>
+        <nivelDificultad>Medio</nivelDificultad>
+        <nombre>Tiramisú</nombre>
+        <paisOrigen>Italia</paisOrigen>
+        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1000</peso>
+        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</porciones>
+        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</requiereRefrigeracion>
+        <sabor>Cafe y cacao</sabor>
+        <textura>Cremoso</textura>
+        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</tiempoConservacion>
+        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">40</tiempoPreparacion>
+        <tiempoReposo rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">360</tiempoReposo>
+        <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneGluten>
+        <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneLactosa>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#TrufasChocolate -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#TrufasChocolate">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Confiteria"/>
+        <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaRefrigerado"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Chocolate"/>
+        <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
+        <nivelDificultad>Facil</nivelDificultad>
+        <nombre>Trufas de Chocolate</nombre>
+        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</porciones>
+        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15</tiempoPreparacion>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Vainilla -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Vainilla">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
+        <descripcion>Extracto natural de vainilla</descripcion>
+        <nombre>Vainilla</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Yogur -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Yogur">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Animal"/>
+        <descripcion>Para humedad en bizcochos</descripcion>
+        <nombre>Yogur Natural</nombre>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/reposteria#Zanahoria -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Zanahoria">
+        <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
+        <descripcion>Rallada para pasteles</descripcion>
+        <nombre>Zanahoria</nombre>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi -->
+

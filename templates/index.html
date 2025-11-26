@@ -4,15 +4,12 @@
     <meta charset="UTF-8">
     <title>Buscador de Repostería</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- CSS EXTERNO -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <!-- Header con buscador -->
     <div class="header">
         <h1>Buscador de Repostería</h1>
-        
         <form method="POST" class="search-container">
             <input type="text" name="term" placeholder="Busca brownies, pasteles, chocolate..." value="{{ term }}">
             <button type="submit">🔍 Buscar</button>
@@ -21,7 +18,7 @@
 
     <!-- Resultados locales -->
     <div class="results-container">
-        <h2>Resultados Locales</h2>
+        <h2>📍 Resultados Locales</h2>
         {% if results_local %}
             <div class="results-grid">
                 {% for item in results_local %}
@@ -52,24 +49,6 @@
                         </div>
                         {% endif %}
 
-                        {% if item.descripcion %}
-                        <div class="card-section">
-                            <div class="section-title">Descripción</div>
-                            <p>{{ item.descripcion }}</p>
-                        </div>
-                        {% endif %}
-
-                        {% if item.categorias %}
-                        <div class="card-section">
-                            <div class="section-title">Categorías</div>
-                            <div class="tag-container">
-                                {% for cat in item.categorias %}
-                                    <span class="tag">{{ cat }}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endif %}
-
                         {% if item.es_producto %}
                             {% if item.ingredientes %}
                             <div class="card-section">
@@ -79,6 +58,11 @@
                                         <li>{{ ing }}</li>
                                     {% endfor %}
                                 </ul>
+                            </div>
+                            {% else %}
+                            <div class="card-section">
+                                <div class="section-title">Ingredientes</div>
+                                <p>Sin ingredientes registrados</p>
                             </div>
                             {% endif %}
 
@@ -118,17 +102,35 @@
                             </div>
                         </div>
                         {% endif %}
+
+                        {% if item.usada_en %}
+                        <div class="card-section">
+                            <div class="section-title">Usado en</div>
+                            <div class="tag-container">
+                                {% for uso in item.usada_en %}
+                                    <span class="tag">{{ uso }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if item.descripcion %}
+                        <div class="card-section">
+                            <div class="section-title">Descripción</div>
+                            <p>{{ item.descripcion }}</p>
+                        </div>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
         {% else %}
-            <p>No se encontraron resultados locales.</p>
+            <p>No se encontraron resultados locales</p>
         {% endif %}
     </div>
 
     <!-- Resultados DBpedia -->
     <div class="results-container">
-        <h2>Resultados Online (DBpedia)</h2>
+        <h2>🌐 Resultados DBpedia</h2>
         {% if results_dbpedia %}
             <div class="results-grid">
                 {% for item in results_dbpedia %}
@@ -144,29 +146,32 @@
 
                         <div class="card-section">
                             <div class="section-title">Descripción</div>
-                            <p>{{ item.descripcion }}</p>
+                            <p>{{ item.descripcion if item.descripcion else "Sin descripción disponible" }}</p>
                         </div>
 
                         <div class="card-section">
                             <div class="section-title">Ingredientes</div>
-                            <ul>
-                                {% for ing in item.ingredientes %}
-                                    <li>{{ ing }}</li>
-                                {% endfor %}
-                            </ul>
+                            {% if item.ingredientes %}
+                                <ul>
+                                    {% for ing in item.ingredientes %}
+                                        <li>{{ ing }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p>Sin ingredientes registrados</p>
+                            {% endif %}
                         </div>
 
                         <div class="card-section">
                             <div class="section-title">Enlace DBpedia</div>
-                            <a href="{{ item.dbpedia_uri }}" target="_blank">Ver recurso en DBpedia</a>
+                            <a href="{{ item.dbpedia_uri }}" target="_blank">{{ item.dbpedia_uri }}</a>
                         </div>
                     </div>
                 {% endfor %}
             </div>
         {% else %}
-            <p>No se encontraron resultados en DBpedia.</p>
+            <p>No se encontraron resultados en DBpedia</p>
         {% endif %}
     </div>
-
 </body>
 </html>

@@ -2,122 +2,173 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Buscador de Repostería</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador de Repostería - Local + DBpedia</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- CSS EXTERNO -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <!-- Header con buscador -->
+    <!-- Header -->
     <div class="header">
-        <h1>Buscador de Repostería</h1>
-        
-        <form method="POST" class="search-container">
-            <input type="text" name="term" placeholder="Busca brownies, pasteles, chocolate..." value="{{ term }}">
+        <h1>🍰 Buscador de Repostería</h1>
+        <form method="POST" class="search-container" id="searchForm">
+            <input type="text" name="term" id="searchInput" placeholder="Busca brownies, pasteles, chocolate, ingredientes..." value="{{ term }}">
             <button type="submit">🔍 Buscar</button>
         </form>
     </div>
 
-    <!-- Resultados -->
-    <div class="results-container">
-        {% if results %}
-            <div class="results-grid">
-                {% for item in results %}
-                    <div class="card">
-                        <div class="card-header">
-                            <h3>{{ item.nombre }}</h3>
-                        </div>
+    <!-- Tabs Container -->
+    <div class="tabs-container">
+        <!-- Tabs Header -->
+        <div class="tabs-header">
+            <button class="tab-button active" data-tab="local-tab">
+                📍 Resultados Locales
+            </button>
+            <button class="tab-button" data-tab="dbpedia-tab">
+                🌐 Resultados DBpedia
+            </button>
+        </div>
 
-                        {% if item.clases %}
-                        <div class="card-section">
-                            <div class="section-title">Clasificación</div>
-                            <div class="tag-container">
-                                {% for clase in item.clases %}
+        <!-- Tab Content: Resultados Locales -->
+        <div id="local-tab" class="tab-content active">
+            <div class="results-container">
+                {% if results %}
+                    {% set local_results = results | selectattr('fuente', 'equalto', 'local') | list %}
+                    
+                    {% if local_results %}
+                    <div class="section-header">
+                        <h2>Resultados de la Ontología Local</h2>
+                        <span class="results-count">{{ local_results|length }} resultado(s)</span>
+                    </div>
+                    
+                    <div class="results-grid">
+                        {% for item in local_results %}
+                        <div class="card local-result">
+                            <div class="card-header">
+                                <h3>
+                                    {{ item.nombre }}
+                                    <span class="source-badge source-local">LOCAL</span>
+                                </h3>
+                            </div>
+
+                            {% if item.clases %}
+                            <div class="card-section">
+                                <div class="section-title">Clasificación</div>
+                                <div class="tag-container">
+                                    {% for clase in item.clases %}
                                     <span class="tag">{{ clase }}</span>
-                                {% endfor %}
+                                    {% endfor %}
+                                </div>
                             </div>
-                        </div>
-                        {% endif %}
+                            {% endif %}
 
-                        {% if item.superclases %}
-                        <div class="card-section">
-                            <div class="section-title">Superclases</div>
-                            <div class="tag-container">
-                                {% for super in item.superclases %}
+                            {% if item.superclases %}
+                            <div class="card-section">
+                                <div class="section-title">Superclases</div>
+                                <div class="tag-container">
+                                    {% for super in item.superclases %}
                                     <span class="tag">{{ super }}</span>
-                                {% endfor %}
+                                    {% endfor %}
+                                </div>
                             </div>
-                        </div>
-                        {% endif %}
+                            {% endif %}
 
-                        {% if item.es_producto %}
-                            {% if item.ingredientes %}
-                            <div class="card-section">
-                                <div class="section-title">Ingredientes</div>
-                                <ul>
-                                    {% for ing in item.ingredientes %}
+                            {% if item.es_producto %}
+                                {% if item.ingredientes %}
+                                <div class="card-section">
+                                    <div class="section-title">Ingredientes</div>
+                                    <ul>
+                                        {% for ing in item.ingredientes %}
                                         <li>{{ ing }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                {% endif %}
 
-                            {% if item.herramientas %}
-                            <div class="card-section">
-                                <div class="section-title">Herramientas</div>
-                                <ul>
-                                    {% for h in item.herramientas %}
+                                {% if item.herramientas %}
+                                <div class="card-section">
+                                    <div class="section-title">Herramientas</div>
+                                    <ul>
+                                        {% for h in item.herramientas %}
                                         <li>{{ h }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                {% endif %}
 
-                            {% if item.tecnicas %}
-                            <div class="card-section">
-                                <div class="section-title">Técnicas</div>
-                                <ul>
-                                    {% for t in item.tecnicas %}
+                                {% if item.tecnicas %}
+                                <div class="card-section">
+                                    <div class="section-title">Técnicas</div>
+                                    <ul>
+                                        {% for t in item.tecnicas %}
                                         <li>{{ t }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
 
-                        {% if item.atributos %}
-                        <div class="card-section">
-                            <div class="section-title">Atributos</div>
-                            <div class="attributes-grid">
-                                {% for key, values in item.atributos.items() %}
+                            {% if item.atributos %}
+                            <div class="card-section">
+                                <div class="section-title">Atributos</div>
+                                <div class="attributes-grid">
+                                    {% for key, values in item.atributos.items() %}
                                     <div class="attribute-item">
                                         <div class="attribute-key">{{ key }}</div>
                                         <div class="attribute-values">{{ values|join(', ') }}</div>
                                     </div>
-                                {% endfor %}
+                                    {% endfor %}
+                                </div>
                             </div>
-                        </div>
-                        {% endif %}
+                            {% endif %}
 
-                        {% if item.usada_en %}
-                        <div class="card-section">
-                            <div class="section-title">Usado en</div>
-                            <div class="tag-container">
-                                {% for uso in item.usada_en %}
+                            {% if item.usada_en %}
+                            <div class="card-section">
+                                <div class="section-title">Usado en</div>
+                                <div class="tag-container">
+                                    {% for uso in item.usada_en %}
                                     <span class="tag">{{ uso }}</span>
-                                {% endfor %}
+                                    {% endfor %}
+                                </div>
                             </div>
+                            {% endif %}
                         </div>
-                        {% endif %}
+                        {% endfor %}
                     </div>
-                {% endfor %}
+                    {% else %}
+                    <div class="no-results">
+                        🔍 No se encontraron resultados locales
+                    </div>
+                    {% endif %}
+                {% else %}
+                <div class="no-results">
+                    Realiza una búsqueda para ver resultados locales
+                </div>
+                {% endif %}
             </div>
-        {% else %}
-            <div class="no-results">
-                <p>🔍 No se encontraron resultados</p>
+        </div>
+
+        <!-- Tab Content: Resultados DBpedia -->
+        <div id="dbpedia-tab" class="tab-content">
+            <div class="results-container">
+                <div class="section-header">
+                    <h2>Resultados desde DBpedia</h2>
+                    <span class="results-count" id="dbpedia-count">Esperando búsqueda...</span>
+                </div>
+
+                <div id="dbpedia-results-grid" class="results-grid">
+                    <!-- Loading spinner inicial -->
+                    <div class="loading-container active" id="dbpedia-loading">
+                        <div class="spinner"></div>
+                        <div class="loading-text">
+                            Esperando búsqueda<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
+                        </div>
+                    </div>
+                </div>
             </div>
-        {% endif %}
+        </div>
     </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

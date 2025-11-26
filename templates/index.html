@@ -19,11 +19,12 @@
         </form>
     </div>
 
-    <!-- Resultados -->
+    <!-- Resultados locales -->
     <div class="results-container">
-        {% if results %}
+        <h2>Resultados Locales</h2>
+        {% if results_local %}
             <div class="results-grid">
-                {% for item in results %}
+                {% for item in results_local %}
                     <div class="card">
                         <div class="card-header">
                             <h3>{{ item.nombre }}</h3>
@@ -46,6 +47,24 @@
                             <div class="tag-container">
                                 {% for super in item.superclases %}
                                     <span class="tag">{{ super }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if item.descripcion %}
+                        <div class="card-section">
+                            <div class="section-title">Descripción</div>
+                            <p>{{ item.descripcion }}</p>
+                        </div>
+                        {% endif %}
+
+                        {% if item.categorias %}
+                        <div class="card-section">
+                            <div class="section-title">Categorías</div>
+                            <div class="tag-container">
+                                {% for cat in item.categorias %}
+                                    <span class="tag">{{ cat }}</span>
                                 {% endfor %}
                             </div>
                         </div>
@@ -99,25 +118,55 @@
                             </div>
                         </div>
                         {% endif %}
-
-                        {% if item.usada_en %}
-                        <div class="card-section">
-                            <div class="section-title">Usado en</div>
-                            <div class="tag-container">
-                                {% for uso in item.usada_en %}
-                                    <span class="tag">{{ uso }}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
         {% else %}
-            <div class="no-results">
-                <p>🔍 No se encontraron resultados</p>
-            </div>
+            <p>No se encontraron resultados locales.</p>
         {% endif %}
     </div>
+
+    <!-- Resultados DBpedia -->
+    <div class="results-container">
+        <h2>Resultados Online (DBpedia)</h2>
+        {% if results_dbpedia %}
+            <div class="results-grid">
+                {% for item in results_dbpedia %}
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>{{ item.nombre }}</h3>
+                        </div>
+
+                        <div class="card-section">
+                            <div class="section-title">Tipo</div>
+                            <p>{{ item.tipo }}</p>
+                        </div>
+
+                        <div class="card-section">
+                            <div class="section-title">Descripción</div>
+                            <p>{{ item.descripcion }}</p>
+                        </div>
+
+                        <div class="card-section">
+                            <div class="section-title">Ingredientes</div>
+                            <ul>
+                                {% for ing in item.ingredientes %}
+                                    <li>{{ ing }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <div class="card-section">
+                            <div class="section-title">Enlace DBpedia</div>
+                            <a href="{{ item.dbpedia_uri }}" target="_blank">Ver recurso en DBpedia</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No se encontraron resultados en DBpedia.</p>
+        {% endif %}
+    </div>
+
 </body>
 </html>

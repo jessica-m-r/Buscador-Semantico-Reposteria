@@ -1,201 +1,167 @@
+# app.py
 from flask import Flask, render_template, request
-from rdflib import Graph, RDFS, RDF, Namespace, Literal
+from utils import OntologyHelper
+from SPARQLWrapper import SPARQLWrapper, JSON
 
 app = Flask(__name__)
 
-# Cargar ontología
-g = Graph()
-g.parse("reposteria.rdf", format="xml")
+# -------------------------
+# Ontología local
+# -------------------------
+ontology = OntologyHelper(r"D:\WebSemantica\buscador_reposteria\reposteria_poblada.rdf")
 
-NS = Namespace("http://www.semanticweb.org/ontologies/reposteria#")
 
-def get_all_subclasses(cls):
-    subclasses = set()
-    for sub in g.subjects(RDFS.subClassOf, cls):
-        subclasses.add(sub)
-        subclasses |= get_all_subclasses(sub)
-    return subclasses
+# -------------------------
+# Función para buscar en DBpedia online
+# -------------------------
+def search_dbpedia(term: str, limit: int = 10):
+    sparql = SPARQLWrapper("https://dbpedia.org/sparql")
+    sparql.setReturnFormat(JSON)
+    sparql.setTimeout(30)
 
-def get_all_superclasses(cls):
-    superclasses = set()
-    for sup in g.objects(cls, RDFS.subClassOf):
-        superclasses.add(sup)
-        superclasses |= get_all_superclasses(sup)
-    return superclasses
+    query = f"""
+    PREFIX dbo: <http://dbpedia.org/ontology/>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-def get_instances_of_class(cls):
-    subclasses = {cls} | get_all_subclasses(cls)
-    instances = set()
-    for c in subclasses:
-        for inst in g.subjects(RDF.type, c):
-            instances.add(inst)
-    return list(instances)
+    SELECT DISTINCT ?dessert ?label ?abstract ?description ?ingredientName ?ingredient ?ingredientLabel
+    WHERE {{
+        {{
+            ?dessert a dbo:Food ;
+                     rdfs:label ?label .
+        }}
+        UNION
+        {{
+            ?dessert rdfs:label ?label .
+            FILTER regex(?label, "{term}", "i")
+        }}
+        
+        FILTER (lang(?label) = "en" || lang(?label) = "es")
+        FILTER regex(?label, "{term}", "i")
+        
+        # Abstract (descripción larga)
+        OPTIONAL {{ 
+            ?dessert dbo:abstract ?abstract .
+            FILTER (lang(?abstract) = "en" || lang(?abstract) = "es")
+        }}
+        
+        # Description (descripción corta)
+        OPTIONAL {{ 
+            ?dessert dbo:description ?description .
+            FILTER (lang(?description) = "en" || lang(?description) = "es")
+        }}
+        
+        # Nombre de ingredientes (texto plano)
+        OPTIONAL {{ 
+            ?dessert dbo:ingredientName ?ingredientName .
+            FILTER (lang(?ingredientName) = "en" || lang(?ingredientName) = "es" || !bound(lang(?ingredientName)))
+        }}
+        
+        # Ingredientes (URIs con sus labels)
+        OPTIONAL {{ 
+            ?dessert dbo:ingredient ?ingredient .
+            OPTIONAL {{
+                ?ingredient rdfs:label ?ingredientLabel .
+                FILTER (lang(?ingredientLabel) = "en" || lang(?ingredientLabel) = "es")
+            }}
+        }}
+    }} 
+    LIMIT 100
+    """
 
-# -----------------------------------------------
-# 🔍 BÚSQUEDA DE INSTANCIAS
-# -----------------------------------------------
-def search_instances(term):
-    term_lower = term.lower()
+    sparql.setQuery(query)
     results = []
-    seen = set()
-
-    for inst in g.subjects(RDF.type, None):
-        if inst in seen:
-            continue
-
-        nombre = g.value(inst, NS.nombre)
-        inst_name = str(nombre) if nombre else inst.split("#")[-1]
-
-        if term_lower in inst_name.lower():
-
-            # ---------------------------
-            # Clases y superclases
-            # ---------------------------
-            clases = [cls.split("#")[-1] for cls in g.objects(inst, RDF.type)]
-
-            superclases = []
-            for cls_uri in g.objects(inst, RDF.type):
-                superclases += [str(s.split("#")[-1]) for s in get_all_superclasses(cls_uri)]
-
-            clases_uris = list(g.objects(inst, RDF.type))
-            es_producto = False
-            for cls_uri in clases_uris:
-                cls_name = cls_uri.split("#")[-1].lower()
-                if cls_name == "producto":
-                    es_producto = True
-                    break
-                # Verificar si Producto está en las superclases
-                superclases_names = [s.split("#")[-1].lower() for s in get_all_superclasses(cls_uri)]
-                if "producto" in superclases_names:
-                    es_producto = True
-                    break
-
-            # ---------------------------
-            # SEPARACIÓN DE ATRIBUTOS
-            # ---------------------------
-
-            ingredientes = []
-            herramientas = []
-            tecnicas = []
-            atributos = {}
-
-            for prop, obj in g.predicate_objects(inst):
-
-                prop_name = prop.split("#")[-1]
-
-                # IGNORAR rdf:type
-                if prop == RDF.type:
-                    continue
-
-                if es_producto:
-                    # --- Ingredientes ---
-                    if prop == NS.tieneIngrediente or prop_name.lower().startswith("ingrediente"):
-                        ingredientes.append(obj.split("#")[-1])
-                        continue
-
-                    # --- Herramientas ---
-                    if prop == NS.usaHerramienta or prop_name.lower().startswith("herramienta"):
-                        herramientas.append(obj.split("#")[-1])
-                        continue
-
-                    # --- Técnicas ---
-                    if prop == NS.requiereTecnica or prop_name.lower().startswith("tecnica"):
-                        tecnicas.append(obj.split("#")[-1])
-                        continue
-
-                # --- Literal (los valores numéricos o texto) ---
-                if isinstance(obj, Literal):
-                    atributos.setdefault(prop_name, []).append(str(obj))
-                    continue
-
-                # Para no-Productos, incluir todas las propiedades que no sean literales
-                if not es_producto:
-                    if not isinstance(obj, Literal):
-                        atributos.setdefault(prop_name, []).append(obj.split("#")[-1])
-                continue
-
-            # ---------------------------
-            # ¿Es usada por otras instancias?
-            # ---------------------------
-            usada_en = []
-            for s, p, o in g:
-                if str(o) == str(inst):
-                    usada_en.append(str(s).split("#")[-1])
-
-            results.append({
-                "tipo": "instancia",
-                "nombre": inst_name,
-                "clases": clases,
-                "superclases": list(set(superclases)),
-                "es_producto": es_producto,
-                "ingredientes": ingredientes if es_producto else [],
-                "herramientas": herramientas if es_producto else [],
-                "tecnicas": tecnicas if es_producto else [],
-                "atributos": atributos,
-                "usada_en": list(set(usada_en))
-            })
-
-            seen.add(inst)
-
-    return results
-
-# -----------------------------------------------
-# 🔍 BÚSQUEDA DE CLASES
-# -----------------------------------------------
-def search_classes(term):
-    term_lower = term.lower()
-    results = []
-
-    for cls in g.subjects(RDF.type, RDFS.Class):
-        cls_name = cls.split("#")[-1]
-
-        if term_lower != cls_name.lower():
-            continue
-
-        # Propiedades (atributos) definidas para esa clase
-        atributos = []
-        for s, p, o in g.triples((cls, None, None)):
-            if "domain" in p.split("#")[-1]: 
-                continue
-            atributos.append(p.split("#")[-1])
-
-        subclasses = [c.split("#")[-1] for c in get_all_subclasses(cls)]
-        superclasses = [c.split("#")[-1] for c in get_all_superclasses(cls)]
-        instancias = [i.split("#")[-1] for i in get_instances_of_class(cls)]
-
-        results.append({
-            "tipo": "clase",
-            "nombre": cls_name,
-            "atributos": list(set(atributos)),
-            "subclases": subclasses,
-            "superclases": superclasses,
-            "instancias": instancias
-        })
-
+    results_dict = {}
+    
+    try:
+        print(f"Ejecutando consulta DBpedia para: {term}")
+        res = sparql.query().convert()["results"]["bindings"]
+        print(f"Filas encontradas: {len(res)}")
+        
+        # Agrupar resultados por URI del postre (puede haber múltiples filas por ingrediente)
+        for r in res:
+            uri = r["dessert"]["value"]
+            
+            if uri not in results_dict:
+                results_dict[uri] = {
+                    "nombre": r["label"]["value"],
+                    "tipo": "Postre (DBpedia)",
+                    "descripcion": "",
+                    "ingredientes": set(),
+                    "dbpedia_uri": uri
+                }
+            
+            # Obtener descripción (priorizar description sobre abstract)
+            if "description" in r and r["description"]["value"]:
+                results_dict[uri]["descripcion"] = r["description"]["value"]
+            elif "abstract" in r and r["abstract"]["value"] and not results_dict[uri]["descripcion"]:
+                # Truncar abstract si es muy largo
+                abstract = r["abstract"]["value"]
+                results_dict[uri]["descripcion"] = abstract[:300] + "..." if len(abstract) > 300 else abstract
+            
+            # Obtener ingredientName (texto plano)
+            if "ingredientName" in r and r["ingredientName"]["value"]:
+                ingredient_text = r["ingredientName"]["value"]
+                # Dividir por comas si hay múltiples ingredientes
+                for ing in ingredient_text.split(','):
+                    results_dict[uri]["ingredientes"].add(ing.strip())
+            
+            # Obtener ingredientes estructurados
+            if "ingredientLabel" in r and r["ingredientLabel"]["value"]:
+                results_dict[uri]["ingredientes"].add(r["ingredientLabel"]["value"])
+            elif "ingredient" in r:
+                # Extraer nombre del URI si no hay label
+                ingredient_uri = r["ingredient"]["value"]
+                ingredient_name = ingredient_uri.split('/')[-1].replace('_', ' ')
+                results_dict[uri]["ingredientes"].add(ingredient_name)
+        
+        # Convertir el diccionario a lista
+        for uri, data in results_dict.items():
+            data["ingredientes"] = list(data["ingredientes"])[:10]  # Limitar a 10 ingredientes
+            if not data["descripcion"]:
+                data["descripcion"] = "Sin descripción disponible"
+            results.append(data)
+        
+        # Limitar resultados finales
+        results = results[:limit]
+        print(f"Postres únicos procesados: {len(results)}")
+        
+    except Exception as e:
+        print(f"Error consultando DBpedia: {str(e)}")
+        import traceback
+        traceback.print_exc()
+    
     return results
 
 
-# -----------------------------------------------
-# 🔍 CONTROLADOR PRINCIPAL
-# -----------------------------------------------
+# -------------------------
+# Controlador principal
+# -------------------------
 @app.route("/", methods=["GET", "POST"])
 def index():
-    results = []
     term = ""
+    results_local = []
+    results_dbpedia = []
 
     if request.method == "POST":
         term = request.form.get("term", "").strip()
-
         if term:
-            # Buscar instancias
-            inst_res = search_instances(term)
+            # -------------------------
+            # Búsqueda local (múltiples términos)
+            # -------------------------
+            terms = term.split()
+            results_local = ontology.search_instances_multiple_terms(terms)
 
-            # Buscar clases
-            class_res = search_classes(term)
+            # -------------------------
+            # Búsqueda online DBpedia
+            # -------------------------
+            results_dbpedia = search_dbpedia(term, limit=10)
 
-            results = inst_res + class_res
-
-    return render_template("index.html", results=results, term=term)
+    return render_template(
+        "index.html",
+        term=term,
+        results_local=results_local,
+        results_dbpedia=results_dbpedia
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)

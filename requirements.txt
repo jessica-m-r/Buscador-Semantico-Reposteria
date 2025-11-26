@@ -1,0 +1,6 @@
+Flask>=2.0
+rdflib>=6.0.0
+SPARQLWrapper>=1.8.5
+# Opcional (solo si quieres búsqueda semántica con embeddings)
+# sentence-transformers>=2.2.2
+# torch>=1.13.0    # necesario si instalas sentence-transformers localmente

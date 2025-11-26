@@ -2,12 +2,6 @@ from flask import Flask, render_template, request,jsonify
 from rdflib import Graph, RDFS, RDF, Namespace, Literal
 from SPARQLWrapper import SPARQLWrapper, JSON
 import re
-# ============================
-# CACHE EN MEMORIA (RAM)
-# ============================
-local_cache = {}        # cache de resultados locales
-dbpedia_cache = {}      # cache de resultados DBpedia
-
 
 app = Flask(__name__)
 

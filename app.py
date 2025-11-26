@@ -316,11 +316,12 @@ def search_dbpedia_food(term):
             for token in search_tokens
         ])
         
-        # *** CONSULTA OPTIMIZADA CON FILTROS MÁS FLEXIBLES ***
+        # *** CONSULTA OPTIMIZADA - PRODUCTOS DE REPOSTERÍA ***
         query = f"""
         PREFIX dbo: <http://dbpedia.org/ontology/>
         PREFIX dbp: <http://dbpedia.org/property/>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX dct: <http://purl.org/dc/terms/>
         
         SELECT DISTINCT 
             ?item 
@@ -331,12 +332,75 @@ def search_dbpedia_food(term):
             (SAMPLE(?countryName) AS ?countryLabel)
             (SAMPLE(?regionName) AS ?regionLabel)
         WHERE {{
-            # Item principal
+            # Item principal - debe ser Food
             ?item rdfs:label ?label .
             ?item a dbo:Food .
             
             FILTER(LANG(?label) = "en")
             FILTER({filter_conditions})
+            
+            # FILTRO: Debe contener ingredientes típicos de repostería O palabras clave
+            FILTER(
+                # Palabras clave de repostería en el nombre
+                CONTAINS(LCASE(?label), "cake") ||
+                CONTAINS(LCASE(?label), "cookie") ||
+                CONTAINS(LCASE(?label), "brownie") ||
+                CONTAINS(LCASE(?label), "tart") ||
+                CONTAINS(LCASE(?label), "pie") ||
+                CONTAINS(LCASE(?label), "pudding") ||
+                CONTAINS(LCASE(?label), "mousse") ||
+                CONTAINS(LCASE(?label), "cheesecake") ||
+                CONTAINS(LCASE(?label), "cupcake") ||
+                CONTAINS(LCASE(?label), "macaron") ||
+                CONTAINS(LCASE(?label), "tiramisu") ||
+                CONTAINS(LCASE(?label), "flan") ||
+                CONTAINS(LCASE(?label), "éclair") ||
+                CONTAINS(LCASE(?label), "donut") ||
+                CONTAINS(LCASE(?label), "doughnut") ||
+                CONTAINS(LCASE(?label), "muffin") ||
+                CONTAINS(LCASE(?label), "pastry") ||
+                CONTAINS(LCASE(?label), "sweet") ||
+                CONTAINS(LCASE(?label), "dessert") ||
+                CONTAINS(LCASE(?label), "chocolate") ||
+                CONTAINS(LCASE(?label), "truffle") ||
+                CONTAINS(LCASE(?label), "candy") ||
+                CONTAINS(LCASE(?label), "confection") ||
+                CONTAINS(LCASE(?label), "biscuit") ||
+                CONTAINS(LCASE(?label), "wafer") ||
+                CONTAINS(LCASE(?label), "meringue") ||
+                CONTAINS(LCASE(?label), "soufflé") ||
+                CONTAINS(LCASE(?label), "parfait") ||
+                CONTAINS(LCASE(?label), "sundae") ||
+                CONTAINS(LCASE(?label), "gelato") ||
+                CONTAINS(LCASE(?label), "sorbet") ||
+                CONTAINS(LCASE(?label), "ice cream") ||
+                CONTAINS(LCASE(?label), "frosting") ||
+                CONTAINS(LCASE(?label), "icing") ||
+                CONTAINS(LCASE(?label), "cream") ||
+                CONTAINS(LCASE(?label), "custard") ||
+                CONTAINS(LCASE(?label), "ganache") ||
+                CONTAINS(LCASE(?label), "glaze") ||
+                CONTAINS(LCASE(?label), "praline") ||
+                CONTAINS(LCASE(?label), "nougat") ||
+                CONTAINS(LCASE(?label), "fondant") ||
+                CONTAINS(LCASE(?label), "danish") ||
+                CONTAINS(LCASE(?label), "croissant") ||
+                CONTAINS(LCASE(?label), "scone") ||
+                CONTAINS(LCASE(?label), "shortbread") ||
+                CONTAINS(LCASE(?label), "sponge") ||
+                CONTAINS(LCASE(?label), "layer cake") ||
+                CONTAINS(LCASE(?label), "torte") ||
+                CONTAINS(LCASE(?label), "strudel") ||
+                CONTAINS(LCASE(?label), "cobbler") ||
+                CONTAINS(LCASE(?label), "crumble") ||
+                CONTAINS(LCASE(?label), "panna cotta") ||
+                CONTAINS(LCASE(?label), "baklava") ||
+                CONTAINS(LCASE(?label), "cannoli") ||
+                CONTAINS(LCASE(?label), "profiterole") ||
+                CONTAINS(LCASE(?label), "choux") ||
+                CONTAINS(LCASE(?label), "creme") ||
+                CONTAINS(LCASE(?label), "crème")
+            )
             
             # Thumbnail (opcional)
             OPTIONAL {{ ?item dbo:thumbnail ?thumbnail . }}

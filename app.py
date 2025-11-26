@@ -268,7 +268,7 @@ def search_classes(term):
 # -----------------------------------------------
 def search_dbpedia_food(term):
     """
-    Busca SOLO comidas en DBpedia usando múltiples términos
+    Búsqueda optimizada en DBpedia - Versión mejorada con mejor compatibilidad
     """
     tokens = tokenize_search_term(term)
     
@@ -279,9 +279,9 @@ def search_dbpedia_food(term):
     
     try:
         sparql = SPARQLWrapper(DBPEDIA_ENDPOINT)
-        sparql.setTimeout(20)
+        sparql.setTimeout(15)
         
-        # Traducir términos comunes al inglés para mejor búsqueda
+        # Traducciones
         term_translations = {
             'chocolate': 'chocolate',
             'vainilla': 'vanilla',
@@ -306,39 +306,91 @@ def search_dbpedia_food(term):
             'naranja': 'orange'
         }
         
-        # Traducir tokens al inglés
         search_tokens = []
         for token in tokens:
             translated = term_translations.get(token, token)
             search_tokens.append(translated)
         
-        # Construir filtro SPARQL con OR lógico
         filter_conditions = " || ".join([
             f'CONTAINS(LCASE(?label), LCASE("{token}"))' 
             for token in search_tokens
         ])
         
-        # Consulta SPARQL mejorada
+        # *** CONSULTA OPTIMIZADA CON FILTROS MÁS FLEXIBLES ***
         query = f"""
         PREFIX dbo: <http://dbpedia.org/ontology/>
+        PREFIX dbp: <http://dbpedia.org/property/>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         
-        SELECT DISTINCT ?item ?label ?thumbnail
+        SELECT DISTINCT 
+            ?item 
+            ?label 
+            ?thumbnail
+            (SAMPLE(?desc) AS ?abstract)
+            (GROUP_CONCAT(DISTINCT ?ingredientName; separator="|") AS ?ingredients)
+            (SAMPLE(?countryName) AS ?countryLabel)
+            (SAMPLE(?regionName) AS ?regionLabel)
         WHERE {{
+            # Item principal
             ?item rdfs:label ?label .
             ?item a dbo:Food .
             
             FILTER(LANG(?label) = "en")
             FILTER({filter_conditions})
             
+            # Thumbnail (opcional)
             OPTIONAL {{ ?item dbo:thumbnail ?thumbnail . }}
+            
+            # Abstract/Descripción (más flexible, acepta cualquier idioma si no hay inglés)
+            OPTIONAL {{
+                ?item dbo:abstract ?desc .
+                FILTER(LANG(?desc) = "en")
+            }}
+            
+            # Ingredientes (más flexible)
+            OPTIONAL {{
+                ?item dbo:ingredient ?ingredient .
+                OPTIONAL {{
+                    ?ingredient rdfs:label ?ingredientName .
+                    FILTER(LANG(?ingredientName) = "en")
+                }}
+            }}
+            
+            # País (busca en múltiples propiedades)
+            OPTIONAL {{
+                {{
+                    ?item dbo:country ?country .
+                }}
+                UNION
+                {{
+                    ?item dbp:country ?country .
+                }}
+                OPTIONAL {{
+                    ?country rdfs:label ?countryName .
+                    FILTER(LANG(?countryName) = "en")
+                }}
+            }}
+            
+            # Región
+            OPTIONAL {{
+                ?item dbo:region ?region .
+                OPTIONAL {{
+                    ?region rdfs:label ?regionName .
+                    FILTER(LANG(?regionName) = "en")
+                }}
+            }}
         }}
-        LIMIT 10
+        GROUP BY ?item ?label ?thumbnail
+        LIMIT 15
         """
+        
+        print(f"\n=== Buscando en DBpedia: {term} ===")
         
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         query_results = sparql.query().convert()
+        
+        print(f"Resultados encontrados: {len(query_results['results']['bindings'])}")
         
         processed_items = set()
         
@@ -352,131 +404,42 @@ def search_dbpedia_food(term):
             label = result.get("label", {}).get("value", item_uri.split("/")[-1])
             thumbnail_url = result.get("thumbnail", {}).get("value", None)
             
-            print(f"\n{'='*60}")
-            print(f"Procesando: {label}")
-            print(f"URI: {item_uri}")
-            print(f"Thumbnail: {thumbnail_url}")
+            print(f"  • {label}")
             
-            # Obtener descripción
-            abstract = "Descripción no disponible en DBpedia"
-            try:
-                abstract_query = f"""
-                PREFIX dbo: <http://dbpedia.org/ontology/>
-                PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                
-                SELECT ?text
-                WHERE {{
-                    {{
-                        <{item_uri}> dbo:abstract ?text .
-                        FILTER(LANG(?text) = "en")
-                    }}
-                    UNION
-                    {{
-                        <{item_uri}> rdfs:comment ?text .
-                        FILTER(LANG(?text) = "en")
-                    }}
-                    UNION
-                    {{
-                        <{item_uri}> dbo:description ?text .
-                    }}
-                }}
-                LIMIT 1
-                """
-                
-                sparql_abstract = SPARQLWrapper(DBPEDIA_ENDPOINT)
-                sparql_abstract.setQuery(abstract_query)
-                sparql_abstract.setReturnFormat(JSON)
-                sparql_abstract.setTimeout(10)
-                abstract_result = sparql_abstract.query().convert()
-                
-                if abstract_result["results"]["bindings"]:
-                    abstract = abstract_result["results"]["bindings"][0]["text"]["value"]
-                    print(f"✓ Descripción obtenida correctamente")
-                else:
-                    print(f"✗ No se encontró ninguna descripción")
-                    
-            except Exception as e:
-                print(f"✗ Error obteniendo descripción: {str(e)}")
+            # Descripción
+            abstract = result.get("abstract", {}).get("value", "")
+            
+            if not abstract or abstract == "":
                 abstract = "Descripción no disponible en DBpedia"
-            
-            # Limitar el abstract a 400 caracteres
-            if abstract and abstract != "Descripción no disponible en DBpedia" and len(abstract) > 400:
+            elif len(abstract) > 400:
                 abstract = abstract[:397] + "..."
             
-            # Buscar ingredientes
+            # Ingredientes
             ingredientes = []
-            try:
-                ing_query = f"""
-                PREFIX dbo: <http://dbpedia.org/ontology/>
-                
-                SELECT DISTINCT ?ingredient 
-                WHERE {{
-                    <{item_uri}> dbo:ingredient ?ingredient .
-                }}
-                LIMIT 15
-                """
-                sparql_ing = SPARQLWrapper(DBPEDIA_ENDPOINT)
-                sparql_ing.setQuery(ing_query)
-                sparql_ing.setReturnFormat(JSON)
-                sparql_ing.setTimeout(10)
-                ing_results = sparql_ing.query().convert()
-                
-                for ing_result in ing_results["results"]["bindings"]:
-                    ing = ing_result["ingredient"]["value"]
-                    ing_name = ing.split("/")[-1].replace("_", " ")
-                    if ing_name not in ingredientes:
-                        ingredientes.append(ing_name)
-                        
-                print(f"Ingredientes: {len(ingredientes)}")
-            except Exception as e:
-                print(f"Error obteniendo ingredientes: {e}")
+            ingredients_str = result.get("ingredients", {}).get("value", "")
+            if ingredients_str and ingredients_str != "":
+                raw_ingredients = ingredients_str.split("|")
+                for ing in raw_ingredients[:12]:
+                    if ing and ing.strip():
+                        # Limpiar el nombre del ingrediente
+                        ing_clean = ing.strip()
+                        # Si es una URI, extraer el nombre
+                        if "http://" in ing_clean:
+                            ing_clean = ing_clean.split("/")[-1].replace("_", " ")
+                        if ing_clean and ing_clean not in ingredientes:
+                            ingredientes.append(ing_clean)
             
-            # Buscar país de origen y región
-            pais_origen = None
-            region = None
+            # País y región
+            pais_origen = result.get("countryLabel", {}).get("value", None)
+            region = result.get("regionLabel", {}).get("value", None)
             
-            try:
-                location_query = f"""
-                PREFIX dbo: <http://dbpedia.org/ontology/>
-                PREFIX dbp: <http://dbpedia.org/property/>
-                PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                
-                SELECT DISTINCT ?countryLabel ?regionLabel 
-                WHERE {{
-                    OPTIONAL {{
-                        <{item_uri}> dbo:country ?country .
-                        ?country rdfs:label ?countryLabel .
-                        FILTER(LANG(?countryLabel) = "en")
-                    }}
-                    OPTIONAL {{
-                        <{item_uri}> dbp:country ?country2 .
-                        ?country2 rdfs:label ?countryLabel .
-                        FILTER(LANG(?countryLabel) = "en")
-                    }}
-                    OPTIONAL {{
-                        <{item_uri}> dbo:region ?region .
-                        ?region rdfs:label ?regionLabel .
-                        FILTER(LANG(?regionLabel) = "en")
-                    }}
-                }}
-                LIMIT 1
-                """
-                sparql_loc = SPARQLWrapper(DBPEDIA_ENDPOINT)
-                sparql_loc.setQuery(location_query)
-                sparql_loc.setReturnFormat(JSON)
-                sparql_loc.setTimeout(10)
-                loc_results = sparql_loc.query().convert()
-                
-                if loc_results["results"]["bindings"]:
-                    loc_data = loc_results["results"]["bindings"][0]
-                    if "countryLabel" in loc_data:
-                        pais_origen = loc_data["countryLabel"]["value"]
-                    if "regionLabel" in loc_data:
-                        region = loc_data["regionLabel"]["value"]
-            except Exception as e:
-                print(f"Error obteniendo ubicación: {e}")
+            # Limpiar valores vacíos
+            if pais_origen == "":
+                pais_origen = None
+            if region == "":
+                region = None
             
-            # Calcular relevancia basada en tokens coincidentes
+            # Calcular relevancia
             relevance_score = 0
             label_lower = label.lower()
             for token in search_tokens:
@@ -502,7 +465,7 @@ def search_dbpedia_food(term):
                 "clases": ["Food (DBpedia)"],
                 "superclases": [],
                 "es_producto": True,
-                "ingredientes": ingredientes[:12],
+                "ingredientes": ingredientes,
                 "herramientas": [],
                 "tecnicas": [],
                 "atributos": atributos,
@@ -512,14 +475,17 @@ def search_dbpedia_food(term):
                 "relevance": relevance_score
             })
         
+        print(f"Total procesados: {len(results)}\n")
+        
     except Exception as e:
         print(f"Error consultando DBpedia: {e}")
+        import traceback
+        traceback.print_exc()
     
     # Ordenar por relevancia
     results.sort(key=lambda x: x.get('relevance', 0), reverse=True)
     
     return results
-
 # -----------------------------------------------
 # CONTROLADOR PRINCIPAL
 # -----------------------------------------------

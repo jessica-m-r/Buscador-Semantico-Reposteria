@@ -544,7 +544,7 @@ def search_dbpedia_food(term, language='es'):
             }}
         }}
         GROUP BY ?item ?label ?thumbnail
-        LIMIT 10
+        LIMIT 5
         """
         
         print(f"\n=== Buscando en DBpedia: {term} (idioma: {language}) ===")

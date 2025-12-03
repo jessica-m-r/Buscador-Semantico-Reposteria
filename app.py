@@ -171,22 +171,17 @@ def search_instances(term, language='es'):
         if inst in seen:
             continue
 
-        # Obtener idioma de la instancia (si existe)
-        inst_idioma = g.value(inst, NS.idioma)
-        inst_idioma_str = str(inst_idioma) if inst_idioma else None
-        
-        # Mapear nombre de idioma a código
-        idioma_code = None
-        if inst_idioma_str:
-            for code, info in LANGUAGES.items():
-                if info['name'].lower() == inst_idioma_str.lower():
-                    idioma_code = code
-                    break
-        
-        # Si la instancia tiene idioma definido, debe coincidir
-        # Si NO tiene idioma, se considera "universal" y se incluye
-        if inst_idioma_str and idioma_code and idioma_code != language:
-            continue
+        # Obtener todos los literales de idioma que coincidan con el idioma de búsqueda
+        inst_idioma_literal = [
+            str(v) for v in g.objects(inst, NS.idioma)
+            if isinstance(v, Literal) and getattr(v, 'language', None) == language
+        ]
+
+        # Si la instancia tiene idioma y no coincide con el deseado, se ignora
+        if inst_idioma_literal:
+            if inst_idioma_literal[0].lower() != LANGUAGES[language]['name'].lower():
+                continue
+
 
         # ============================================
         # ESTRATEGIA DE BÚSQUEDA MEJORADA
@@ -198,9 +193,17 @@ def search_instances(term, language='es'):
         nombres_multiidioma = []
         for prop in [NS.nombre, RDFS.label]:
             for obj in g.objects(inst, prop):
-                if isinstance(obj, Literal):
+                if isinstance(obj, Literal) and getattr(obj, "language", None) == language:
                     nombres_multiidioma.append(str(obj).lower())
-        
+        if not nombres_multiidioma:
+            continue
+        # Si no hay nombres en idioma deseado, fallback a inglés
+        if not nombres_multiidioma:
+            for prop in [NS.nombre, RDFS.label]:
+                for obj in g.objects(inst, prop):
+                    if isinstance(obj, Literal) and getattr(obj, 'language', None) == 'en':
+                        nombres_multiidioma.append(str(obj).lower())
+
         # 2. Obtener nombre preferido para mostrar
         nombre_display = get_literal_by_language(inst, NS.nombre, language)
         if not nombre_display:
@@ -239,12 +242,20 @@ def search_instances(term, language='es'):
 
             # Ingredientes
             if prop == NS.tieneIngrediente or "ingrediente" in prop_name.lower():
-                # Buscar nombre del ingrediente en cualquier idioma
+                # Buscar nombre del ingrediente solo en el idioma seleccionado
                 ing_nombres = []
                 for nombre_prop in [NS.nombre, RDFS.label]:
                     for ing_obj in g.objects(obj, nombre_prop):
-                        if isinstance(ing_obj, Literal):
-                            ing_nombres.append(str(ing_obj))
+                        if isinstance(ing_obj, Literal) and getattr(ing_obj, 'language', None) == language:
+                            ing_nombres.append(str(ing_obj).lower())
+
+                # Si no hay resultados en el idioma deseado, fallback a inglés
+                if not ing_nombres:
+                    for nombre_prop in [NS.nombre, RDFS.label]:
+                        for ing_obj in g.objects(obj, nombre_prop):
+                            if isinstance(ing_obj, Literal) and getattr(ing_obj, 'language', None) == 'en':
+                                ing_nombres.append(str(ing_obj).lower())
+
                 
                 # Usar nombre en idioma preferido para mostrar
                 ing_display = get_literal_by_language(obj, NS.nombre, language)
@@ -370,7 +381,7 @@ def search_instances(term, language='es'):
             "tecnicas": tecnicas if es_producto else [],
             "atributos": atributos,
             "usada_en": list(set(usada_en)),
-            "idioma": idioma_code or language,
+            "idioma": inst_idioma_literal[0] if inst_idioma_literal else language,
             "fuente": "local",
             "relevance": relevance_score
         })
@@ -533,7 +544,7 @@ def search_dbpedia_food(term, language='es'):
             }}
         }}
         GROUP BY ?item ?label ?thumbnail
-        LIMIT 15
+        LIMIT 10
         """
         
         print(f"\n=== Buscando en DBpedia: {term} (idioma: {language}) ===")

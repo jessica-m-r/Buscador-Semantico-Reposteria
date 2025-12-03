@@ -3,18 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscador de Repostería - Local + DBpedia</title>
+    <title>Buscador de Repostería - Multiidioma</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <!-- Header -->
     <div class="header">
-        <h1>🍰 Buscador de Repostería</h1>
+        <h1>🍰 <span data-translate="title">Buscador de Repostería</span></h1>
+        
+        <!-- Formulario de búsqueda con selector de idioma -->
         <form method="POST" class="search-container" id="searchForm">
-            <input type="text" name="term" id="searchInput" placeholder="Busca brownies, pasteles, chocolate, ingredientes..." value="{{ term }}">
-            <button type="submit">🔍 Buscar</button>
+            <div class="search-input-wrapper">
+                <input type="text" 
+                       name="term" 
+                       id="searchInput" 
+                       placeholder="Busca brownies, pasteles, chocolate, ingredientes..." 
+                       data-translate-placeholder="searchPlaceholder"
+                       value="{{ term }}">
+                
+                <!-- Selector de idioma dentro del input -->
+                <select name="language" id="languageSelector" class="language-selector">
+                    {% for code, info in languages.items() %}
+                    <option value="{{ code }}" 
+                            {% if code == current_language %}selected{% endif %}>
+                        {{ info.flag }} {{ info.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <button type="submit">🔍 <span data-translate="search">Buscar</span></button>
         </form>
+        
+        <!-- Indicador de idioma actual -->
+        <div class="language-indicator">
+            {% for code, info in languages.items() %}
+                {% if code == current_language %}
+                    <span class="current-lang-badge">
+                        {{ info.flag }} <span data-translate="searchingIn">Buscando en:</span> <strong>{{ info.name }}</strong>
+                    </span>
+                {% endif %}
+            {% endfor %}
+        </div>
     </div>
 
     <!-- Tabs Container -->
@@ -22,10 +53,10 @@
         <!-- Tabs Header -->
         <div class="tabs-header">
             <button class="tab-button active" data-tab="local-tab">
-                📍 Resultados Locales
+                📍 <span data-translate="localResults">Resultados Locales</span>
             </button>
             <button class="tab-button" data-tab="dbpedia-tab">
-                🌐 Resultados DBpedia
+                🌐 <span data-translate="dbpediaResults">Resultados DBpedia</span>
             </button>
         </div>
 
@@ -37,8 +68,8 @@
                     
                     {% if local_results %}
                     <div class="section-header">
-                        <h2>Resultados de la Ontología Local</h2>
-                        <span class="results-count">{{ local_results|length }} resultado(s)</span>
+                        <h2 data-translate="localOntologyResults">Resultados de la Ontología Local</h2>
+                        <span class="results-count">{{ local_results|length }} <span data-translate="resultsCount">resultado(s)</span></span>
                     </div>
                     
                     <div class="results-grid">
@@ -48,12 +79,27 @@
                                 <h3>
                                     {{ item.nombre }}
                                     <span class="source-badge source-local">LOCAL</span>
+                                    {% if item.idioma %}
+                                    <span class="lang-badge" title="{{ languages[item.idioma].name }}">
+                                        {{ languages[item.idioma].flag }}
+                                    </span>
+                                    {% endif %}
                                 </h3>
                             </div>
 
+                            <!-- IDIOMA COMO ATRIBUTO -->
+                            {% if item.idioma %}
+                            <div class="card-section">
+                                <div class="section-title" data-translate="language">Idioma</div>
+                                <div class="tag-container">
+                                    <span class="tag">{{ languages[item.idioma].flag }} {{ languages[item.idioma].name }}</span>
+                                </div>
+                            </div>
+                            {% endif %}
+
                             {% if item.clases %}
                             <div class="card-section">
-                                <div class="section-title">Clasificación</div>
+                                <div class="section-title" data-translate="classification">Clasificación</div>
                                 <div class="tag-container">
                                     {% for clase in item.clases %}
                                     <span class="tag">{{ clase }}</span>
@@ -64,7 +110,7 @@
 
                             {% if item.superclases %}
                             <div class="card-section">
-                                <div class="section-title">Superclases</div>
+                                <div class="section-title" data-translate="superclasses">Superclases</div>
                                 <div class="tag-container">
                                     {% for super in item.superclases %}
                                     <span class="tag">{{ super }}</span>
@@ -76,7 +122,7 @@
                             {% if item.es_producto %}
                                 {% if item.ingredientes %}
                                 <div class="card-section">
-                                    <div class="section-title">Ingredientes</div>
+                                    <div class="section-title" data-translate="ingredients">Ingredientes</div>
                                     <ul>
                                         {% for ing in item.ingredientes %}
                                         <li>{{ ing }}</li>
@@ -87,7 +133,7 @@
 
                                 {% if item.herramientas %}
                                 <div class="card-section">
-                                    <div class="section-title">Herramientas</div>
+                                    <div class="section-title" data-translate="tools">Herramientas</div>
                                     <ul>
                                         {% for h in item.herramientas %}
                                         <li>{{ h }}</li>
@@ -98,7 +144,7 @@
 
                                 {% if item.tecnicas %}
                                 <div class="card-section">
-                                    <div class="section-title">Técnicas</div>
+                                    <div class="section-title" data-translate="techniques">Técnicas</div>
                                     <ul>
                                         {% for t in item.tecnicas %}
                                         <li>{{ t }}</li>
@@ -110,7 +156,7 @@
 
                             {% if item.atributos %}
                             <div class="card-section">
-                                <div class="section-title">Atributos</div>
+                                <div class="section-title" data-translate="attributes">Atributos</div>
                                 <div class="attributes-grid">
                                     {% for key, values in item.atributos.items() %}
                                     <div class="attribute-item">
@@ -124,7 +170,7 @@
 
                             {% if item.usada_en %}
                             <div class="card-section">
-                                <div class="section-title">Usado en</div>
+                                <div class="section-title" data-translate="usedIn">Usado en</div>
                                 <div class="tag-container">
                                     {% for uso in item.usada_en %}
                                     <span class="tag">{{ uso }}</span>
@@ -137,12 +183,16 @@
                     </div>
                     {% else %}
                     <div class="no-results">
-                        🔍 No se encontraron resultados locales
+                        🔍 <span data-translate="noLocalResults">No se encontraron resultados locales en</span>
+                        <strong>{{ languages[current_language].name }}</strong>
+                        <br><small style="margin-top: 10px; display: block; opacity: 0.7;">
+                            <span data-translate="tryChangingLanguage">Intenta cambiar el idioma o realizar otra búsqueda</span>
+                        </small>
                     </div>
                     {% endif %}
                 {% else %}
                 <div class="no-results">
-                    Realiza una búsqueda para ver resultados locales
+                    <span data-translate="performSearch">Realiza una búsqueda para ver resultados locales</span>
                 </div>
                 {% endif %}
             </div>
@@ -152,23 +202,30 @@
         <div id="dbpedia-tab" class="tab-content">
             <div class="results-container">
                 <div class="section-header">
-                    <h2>Resultados desde DBpedia</h2>
-                    <span class="results-count" id="dbpedia-count">Esperando búsqueda...</span>
+                    <h2 data-translate="dbpediaResultsTitle">Resultados desde DBpedia</h2>
+                    <span class="results-count" id="dbpedia-count" data-translate="waitingSearch">Esperando búsqueda...</span>
                 </div>
 
                 <div id="dbpedia-results-grid" class="results-grid">
-                    <!-- Loading spinner inicial -->
-                    <div class="loading-container active" id="dbpedia-loading">
-                        <div class="spinner"></div>
-                        <div class="loading-text">
-                            Esperando búsqueda<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
-                        </div>
-                    </div>
+                    <!-- Los resultados se cargan dinámicamente con JavaScript -->
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Pasar datos al JavaScript -->
+    <script id="app-data" type="application/json">
+        {
+            "currentLanguage": "{{ current_language }}",
+            "searchTerm": "{{ term }}",
+            "languages": {{ languages | tojson }}
+        }
+    </script>
+    <script>
+        // Cargar datos desde el script JSON
+        const appDataElement = document.getElementById('app-data');
+        window.APP_DATA = JSON.parse(appDataElement.textContent);
+    </script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

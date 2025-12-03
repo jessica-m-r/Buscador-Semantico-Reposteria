@@ -1,13 +1,14 @@
-from flask import Flask, render_template, request,jsonify
+from flask import Flask, render_template, request, jsonify
 from rdflib import Graph, RDFS, RDF, Namespace, Literal
 from SPARQLWrapper import SPARQLWrapper, JSON
+from deep_translator import GoogleTranslator
 import re
 
 app = Flask(__name__)
 
 # Cargar ontología local
 g = Graph()
-g.parse("reposteria_poblada.rdf", format="xml")
+g.parse("reposteria_poblada_google.rdf", format="xml")
 
 NS = Namespace("http://www.semanticweb.org/ontologies/reposteria#")
 
@@ -15,36 +16,71 @@ NS = Namespace("http://www.semanticweb.org/ontologies/reposteria#")
 DBPEDIA_ENDPOINT = "https://dbpedia.org/sparql"
 
 # ===============================================
-# NUEVA FUNCIÓN: TOKENIZACIÓN INTELIGENTE
+# CONFIGURACIÓN DE IDIOMAS
+# ===============================================
+LANGUAGES = {
+    'es': {'name': 'Español', 'flag': '🇪🇸', 'dbpedia': 'es'},
+    'en': {'name': 'English', 'flag': '🇬🇧', 'dbpedia': 'en'},
+    'fr': {'name': 'Français', 'flag': '🇫🇷', 'dbpedia': 'fr'},
+    'it': {'name': 'Italiano', 'flag': '🇮🇹', 'dbpedia': 'it'},
+    'de': {'name': 'Deutsch', 'flag': '🇩🇪', 'dbpedia': 'de'},
+    'pt': {'name': 'Português', 'flag': '🇵🇹', 'dbpedia': 'pt'}
+}
+
+# Cache de traductores
+translators_cache = {}
+
+def get_translator(source_lang, target_lang):
+    """Obtener traductor del cache o crear uno nuevo"""
+    key = f"{source_lang}_{target_lang}"
+    if key not in translators_cache:
+        translators_cache[key] = GoogleTranslator(source=source_lang, target=target_lang)
+    return translators_cache[key]
+
+def translate_text(text, source_lang, target_lang):
+    """Traducir texto entre idiomas"""
+    if source_lang == target_lang or not text:
+        return text
+    
+    try:
+        translator = get_translator(source_lang, target_lang)
+        return translator.translate(text)
+    except Exception as e:
+        print(f"Error traduciendo '{text}': {e}")
+        return text
+
+# ===============================================
+# TOKENIZACIÓN INTELIGENTE
 # ===============================================
 def tokenize_search_term(term):
-    """
-    Divide el término de búsqueda en palabras clave,
-    eliminando stopwords (palabras vacías) y limpiando.
-    
-    Retorna: lista de tokens en minúsculas
-    """
-    # Stopwords en español (palabras a ignorar)
+    """Divide el término de búsqueda en palabras clave"""
+    # Stopwords multiidioma
     stopwords = {
-        'de', 'del', 'con', 'sin', 'para', 'por', 'y', 'o', 'u',
-        'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas',
-        'al', 'a', 'en', 'sobre', 'bajo', 'entre', 'desde', 'hasta',
-        'que', 'como', 'muy', 'mas', 'pero', 'si', 'no'
+        'es': {'de', 'del', 'con', 'sin', 'para', 'por', 'y', 'o', 'u', 'el', 'la', 'los', 'las', 'un', 'una'},
+        'en': {'the', 'a', 'an', 'and', 'or', 'with', 'without', 'for', 'of', 'in', 'on', 'at'},
+        'fr': {'le', 'la', 'les', 'de', 'du', 'des', 'et', 'ou', 'avec', 'sans', 'pour'},
+        'it': {'il', 'lo', 'la', 'i', 'gli', 'le', 'di', 'e', 'o', 'con', 'senza'},
+        'de': {'der', 'die', 'das', 'den', 'dem', 'des', 'und', 'oder', 'mit', 'ohne'},
+        'pt': {'o', 'a', 'os', 'as', 'de', 'do', 'da', 'e', 'ou', 'com', 'sem'}
     }
     
-    # Convertir a minúsculas y dividir por espacios
-    words = term.lower().split()
+    # Combinar todas las stopwords
+    all_stopwords = set()
+    for lang_stops in stopwords.values():
+        all_stopwords.update(lang_stops)
     
-    # Filtrar: eliminar stopwords y palabras muy cortas (< 2 caracteres)
+    words = term.lower().split()
     tokens = [
         word.strip() 
         for word in words 
-        if word.strip() not in stopwords and len(word.strip()) >= 2
+        if word.strip() not in all_stopwords and len(word.strip()) >= 2
     ]
     
     return tokens
 
-
+# ===============================================
+# FUNCIONES DE ONTOLOGÍA
+# ===============================================
 def get_all_subclasses(cls):
     subclasses = set()
     for sub in g.subjects(RDFS.subClassOf, cls):
@@ -67,17 +103,64 @@ def get_instances_of_class(cls):
             instances.add(inst)
     return list(instances)
 
-# -----------------------------------------------
-# BÚSQUEDA LOCAL MEJORADA (MULTI-TÉRMINO)
-# -----------------------------------------------
-def search_instances(term):
+def get_literal_by_language(inst, prop, preferred_lang='es'):
     """
-    Busca instancias que coincidan con cualquiera de los tokens
-    del término de búsqueda. Incluye sistema de relevancia.
+    Obtener un literal en el idioma preferido
+    Si no existe, buscar en inglés, y si no, retornar el primero disponible
     """
+    values = list(g.objects(inst, prop))
+    
+    if not values:
+        return None
+    
+    # Buscar en el idioma preferido
+    for value in values:
+        if isinstance(value, Literal) and hasattr(value, 'language'):
+            if value.language == preferred_lang:
+                return str(value)
+    
+    # Buscar en inglés como fallback
+    for value in values:
+        if isinstance(value, Literal) and hasattr(value, 'language'):
+            if value.language == 'en':
+                return str(value)
+    
+    # Retornar el primero disponible
+    return str(values[0])
+
+def get_all_literals_by_language(inst, prop, preferred_lang='es'):
+    """
+    Obtener todos los literales en el idioma preferido
+    """
+    values = list(g.objects(inst, prop))
+    results = []
+    
+    # Primero buscar en el idioma preferido
+    for value in values:
+        if isinstance(value, Literal) and hasattr(value, 'language'):
+            if value.language == preferred_lang:
+                results.append(str(value))
+    
+    # Si no hay resultados, buscar en inglés
+    if not results:
+        for value in values:
+            if isinstance(value, Literal) and hasattr(value, 'language'):
+                if value.language == 'en':
+                    results.append(str(value))
+    
+    # Si aún no hay resultados, tomar todos
+    if not results:
+        results = [str(v) for v in values if isinstance(v, Literal)]
+    
+    return results
+
+# ===============================================
+# BÚSQUEDA LOCAL MEJORADA CON MULTIIDIOMA
+# ===============================================
+def search_instances(term, language='es'):
+    """Búsqueda mejorada con soporte multi-idioma"""
     tokens = tokenize_search_term(term)
     
-    # Si no hay tokens válidos, retornar vacío
     if not tokens:
         return []
     
@@ -88,100 +171,189 @@ def search_instances(term):
         if inst in seen:
             continue
 
-        nombre = g.value(inst, NS.nombre)
-        inst_name = str(nombre) if nombre else inst.split("#")[-1]
+        # Obtener idioma de la instancia (si existe)
+        inst_idioma = g.value(inst, NS.idioma)
+        inst_idioma_str = str(inst_idioma) if inst_idioma else None
+        
+        # Mapear nombre de idioma a código
+        idioma_code = None
+        if inst_idioma_str:
+            for code, info in LANGUAGES.items():
+                if info['name'].lower() == inst_idioma_str.lower():
+                    idioma_code = code
+                    break
+        
+        # Si la instancia tiene idioma definido, debe coincidir
+        # Si NO tiene idioma, se considera "universal" y se incluye
+        if inst_idioma_str and idioma_code and idioma_code != language:
+            continue
 
-        # Sistema de puntuación de relevancia
+        # ============================================
+        # ESTRATEGIA DE BÚSQUEDA MEJORADA
+        # ============================================
         relevance_score = 0
         matched_tokens = []
 
-        # Buscar coincidencias en el nombre
-        for token in tokens:
-            if token in inst_name.lower():
-                relevance_score += 3  # Coincidencia en nombre vale más
-                matched_tokens.append(token)
+        # 1. Buscar en TODOS los literales de nombre (multiidioma)
+        nombres_multiidioma = []
+        for prop in [NS.nombre, RDFS.label]:
+            for obj in g.objects(inst, prop):
+                if isinstance(obj, Literal):
+                    nombres_multiidioma.append(str(obj).lower())
+        
+        # 2. Obtener nombre preferido para mostrar
+        nombre_display = get_literal_by_language(inst, NS.nombre, language)
+        if not nombre_display:
+            nombre_display = get_literal_by_language(inst, RDFS.label, language)
+        if not nombre_display:
+            nombre_display = inst.split("#")[-1]
 
-        # Buscar en propiedades literales
-        for prop, obj in g.predicate_objects(inst):
-            if isinstance(obj, Literal):
-                obj_str = str(obj).lower()
-                for token in tokens:
-                    if token in obj_str and token not in matched_tokens:
-                        relevance_score += 1
-                        matched_tokens.append(token)
-
-        # Buscar en nombres de objetos relacionados
-        for prop, obj in g.predicate_objects(inst):
-            if not isinstance(obj, Literal):
-                obj_name = obj.split("#")[-1].lower()
-                for token in tokens:
-                    if token in obj_name and token not in matched_tokens:
-                        relevance_score += 2
-                        matched_tokens.append(token)
-
-        # Buscar en nombres de clases
-        for cls_uri in g.objects(inst, RDF.type):
-            cls_name = cls_uri.split("#")[-1].lower()
+        # 3. Buscar coincidencias en nombres (cualquier idioma)
+        for nombre in nombres_multiidioma:
             for token in tokens:
-                if token in cls_name and token not in matched_tokens:
-                    relevance_score += 1
-                    matched_tokens.append(token)
+                if token in nombre:
+                    relevance_score += 5  # Mayor peso para coincidencias en nombre
+                    if token not in matched_tokens:
+                        matched_tokens.append(token)
 
-        # Si no hubo ninguna coincidencia, saltar esta instancia
-        if relevance_score == 0:
-            continue
-
-        # Construir información de la instancia
+        # 4. Obtener información de la instancia
         clases = [cls.split("#")[-1] for cls in g.objects(inst, RDF.type)]
-
-        superclases = []
-        for cls_uri in g.objects(inst, RDF.type):
-            superclases += [str(s.split("#")[-1]) for s in get_all_superclasses(cls_uri)]
-
         clases_uris = list(g.objects(inst, RDF.type))
+        
+        # Detectar si es producto
         es_producto = False
+        superclases_all = []
         for cls_uri in clases_uris:
-            cls_name = cls_uri.split("#")[-1].lower()
-            if cls_name == "producto":
+            sups = get_all_superclasses(cls_uri)
+            superclases_all.extend([s.split("#")[-1] for s in sups])
+            if cls_uri.split("#")[-1].lower() == "producto" or "Producto" in [s.split("#")[-1] for s in sups]:
                 es_producto = True
-                break
-            superclases_names = [s.split("#")[-1].lower() for s in get_all_superclasses(cls_uri)]
-            if "producto" in superclases_names:
-                es_producto = True
-                break
 
+        # 5. Buscar en ingredientes/herramientas/técnicas
         ingredientes = []
         herramientas = []
         tecnicas = []
-        atributos = {}
 
         for prop, obj in g.predicate_objects(inst):
             prop_name = prop.split("#")[-1]
 
+            # Ingredientes
+            if prop == NS.tieneIngrediente or "ingrediente" in prop_name.lower():
+                # Buscar nombre del ingrediente en cualquier idioma
+                ing_nombres = []
+                for nombre_prop in [NS.nombre, RDFS.label]:
+                    for ing_obj in g.objects(obj, nombre_prop):
+                        if isinstance(ing_obj, Literal):
+                            ing_nombres.append(str(ing_obj))
+                
+                # Usar nombre en idioma preferido para mostrar
+                ing_display = get_literal_by_language(obj, NS.nombre, language)
+                if not ing_display:
+                    ing_display = get_literal_by_language(obj, RDFS.label, language)
+                if not ing_display:
+                    ing_display = obj.split("#")[-1]
+                ingredientes.append(ing_display)
+                
+                # Buscar coincidencias en todos los nombres del ingrediente
+                for ing_nombre in ing_nombres:
+                    for token in tokens:
+                        if token in ing_nombre.lower():
+                            relevance_score += 3  # Coincidencia en ingrediente
+                            if token not in matched_tokens:
+                                matched_tokens.append(token)
+
+            # Herramientas
+            elif prop == NS.usaHerramienta or "herramienta" in prop_name.lower():
+                herr_nombres = []
+                for nombre_prop in [NS.nombre, RDFS.label]:
+                    for herr_obj in g.objects(obj, nombre_prop):
+                        if isinstance(herr_obj, Literal):
+                            herr_nombres.append(str(herr_obj))
+                
+                herr_display = get_literal_by_language(obj, NS.nombre, language)
+                if not herr_display:
+                    herr_display = get_literal_by_language(obj, RDFS.label, language)
+                if not herr_display:
+                    herr_display = obj.split("#")[-1]
+                herramientas.append(herr_display)
+                
+                for herr_nombre in herr_nombres:
+                    for token in tokens:
+                        if token in herr_nombre.lower():
+                            relevance_score += 2
+                            if token not in matched_tokens:
+                                matched_tokens.append(token)
+
+            # Técnicas
+            elif prop == NS.requiereTecnica or "tecnica" in prop_name.lower():
+                tec_nombres = []
+                for nombre_prop in [NS.nombre, RDFS.label]:
+                    for tec_obj in g.objects(obj, nombre_prop):
+                        if isinstance(tec_obj, Literal):
+                            tec_nombres.append(str(tec_obj))
+                
+                tec_display = get_literal_by_language(obj, NS.nombre, language)
+                if not tec_display:
+                    tec_display = get_literal_by_language(obj, RDFS.label, language)
+                if not tec_display:
+                    tec_display = obj.split("#")[-1]
+                tecnicas.append(tec_display)
+                
+                for tec_nombre in tec_nombres:
+                    for token in tokens:
+                        if token in tec_nombre.lower():
+                            relevance_score += 2
+                            if token not in matched_tokens:
+                                matched_tokens.append(token)
+
+        # 6. Buscar en clases y superclases
+        for cls_name in clases + superclases_all:
+            cls_lower = cls_name.lower()
+            for token in tokens:
+                if token in cls_lower:
+                    relevance_score += 1
+                    if token not in matched_tokens:
+                        matched_tokens.append(token)
+
+        # 7. Buscar en otros literales (descripción, etc.)
+        atributos = {}
+        for prop, obj in g.predicate_objects(inst):
             if prop == RDF.type:
                 continue
-
-            if es_producto:
-                if prop == NS.tieneIngrediente or prop_name.lower().startswith("ingrediente"):
-                    ingredientes.append(obj.split("#")[-1])
-                    continue
-
-                if prop == NS.usaHerramienta or prop_name.lower().startswith("herramienta"):
-                    herramientas.append(obj.split("#")[-1])
-                    continue
-
-                if prop == NS.requiereTecnica or prop_name.lower().startswith("tecnica"):
-                    tecnicas.append(obj.split("#")[-1])
-                    continue
-
-            if isinstance(obj, Literal):
-                atributos.setdefault(prop_name, []).append(str(obj))
+            
+            prop_name = prop.split("#")[-1]
+            
+            # Saltar propiedades ya procesadas
+            if prop in [NS.tieneIngrediente, NS.usaHerramienta, NS.requiereTecnica]:
+                continue
+            if "ingrediente" in prop_name.lower() or "herramienta" in prop_name.lower() or "tecnica" in prop_name.lower():
                 continue
 
-            if not es_producto:
-                if not isinstance(obj, Literal):
+            if isinstance(obj, Literal):
+                # Buscar en el literal
+                obj_str = str(obj).lower()
+                for token in tokens:
+                    if token in obj_str:
+                        relevance_score += 1
+                        if token not in matched_tokens:
+                            matched_tokens.append(token)
+                
+                # Guardar atributo en idioma preferido
+                if hasattr(obj, 'language'):
+                    if obj.language == language:
+                        atributos.setdefault(prop_name, []).append(str(obj))
+                else:
+                    atributos.setdefault(prop_name, []).append(str(obj))
+            else:
+                # Objeto no literal
+                if not es_producto:
                     atributos.setdefault(prop_name, []).append(obj.split("#")[-1])
 
+        # Solo incluir si hay coincidencias
+        if relevance_score == 0:
+            continue
+
+        # 8. Buscar usos de esta instancia
         usada_en = []
         for s, p, o in g:
             if str(o) == str(inst):
@@ -189,30 +361,27 @@ def search_instances(term):
 
         results.append({
             "tipo": "instancia",
-            "nombre": inst_name,
+            "nombre": nombre_display,
             "clases": clases,
-            "superclases": list(set(superclases)),
+            "superclases": list(set(superclases_all)),
             "es_producto": es_producto,
             "ingredientes": ingredientes if es_producto else [],
             "herramientas": herramientas if es_producto else [],
             "tecnicas": tecnicas if es_producto else [],
             "atributos": atributos,
             "usada_en": list(set(usada_en)),
+            "idioma": idioma_code or language,
             "fuente": "local",
-            "relevance": relevance_score  # Para ordenamiento
+            "relevance": relevance_score
         })
 
         seen.add(inst)
 
-    # Ordenar por relevancia (mayor a menor)
     results.sort(key=lambda x: x.get('relevance', 0), reverse=True)
-
     return results
 
-def search_classes(term):
-    """
-    Busca clases que coincidan con cualquiera de los tokens
-    """
+def search_classes(term, language='es'):
+    """Busca clases (sin filtro de idioma ya que las clases son universales)"""
     tokens = tokenize_search_term(term)
     
     if not tokens:
@@ -224,7 +393,6 @@ def search_classes(term):
         cls_name = cls.split("#")[-1]
         cls_name_lower = cls_name.lower()
 
-        # Verificar si algún token coincide con el nombre de la clase
         match = False
         relevance_score = 0
         
@@ -257,23 +425,29 @@ def search_classes(term):
             "relevance": relevance_score
         })
 
-    # Ordenar por relevancia
     results.sort(key=lambda x: x.get('relevance', 0), reverse=True)
-
     return results
 
-
-# -----------------------------------------------
-# BUSQUEDA EN DBPEDIA MEJORADA (MULTI-TÉRMINO)
-# -----------------------------------------------
-def search_dbpedia_food(term):
+# ===============================================
+# BÚSQUEDA EN DBPEDIA CON TRADUCCIÓN AUTOMÁTICA
+# ===============================================
+def search_dbpedia_food(term, language='es'):
     """
-    Búsqueda optimizada en DBpedia - Versión mejorada con mejor compatibilidad
+    Búsqueda en DBpedia con traducción automática al idioma seleccionado
     """
     tokens = tokenize_search_term(term)
     
     if not tokens:
         return []
+    
+    # Traducir términos de búsqueda al inglés (DBpedia funciona mejor en inglés)
+    search_tokens_en = []
+    for token in tokens:
+        if language != 'en':
+            translated = translate_text(token, language, 'en')
+            search_tokens_en.append(translated)
+        else:
+            search_tokens_en.append(token)
     
     results = []
     
@@ -281,42 +455,11 @@ def search_dbpedia_food(term):
         sparql = SPARQLWrapper(DBPEDIA_ENDPOINT)
         sparql.setTimeout(15)
         
-        # Traducciones
-        term_translations = {
-            'chocolate': 'chocolate',
-            'vainilla': 'vanilla',
-            'pastel': 'cake',
-            'galleta': 'cookie',
-            'galletas': 'cookie',
-            'tarta': 'tart',
-            'postre': 'dessert',
-            'brownie': 'brownie',
-            'cheesecake': 'cheesecake',
-            'cupcake': 'cupcake',
-            'bizcocho': 'sponge cake',
-            'mousse': 'mousse',
-            'flan': 'flan',
-            'tiramisu': 'tiramisu',
-            'macarons': 'macaron',
-            'avena': 'oat',
-            'nuez': 'walnut',
-            'almendra': 'almond',
-            'fresa': 'strawberry',
-            'limon': 'lemon',
-            'naranja': 'orange'
-        }
-        
-        search_tokens = []
-        for token in tokens:
-            translated = term_translations.get(token, token)
-            search_tokens.append(translated)
-        
         filter_conditions = " || ".join([
             f'CONTAINS(LCASE(?label), LCASE("{token}"))' 
-            for token in search_tokens
+            for token in search_tokens_en
         ])
         
-        # *** CONSULTA OPTIMIZADA - PRODUCTOS DE REPOSTERÍA ***
         query = f"""
         PREFIX dbo: <http://dbpedia.org/ontology/>
         PREFIX dbp: <http://dbpedia.org/property/>
@@ -332,16 +475,13 @@ def search_dbpedia_food(term):
             (SAMPLE(?countryName) AS ?countryLabel)
             (SAMPLE(?regionName) AS ?regionLabel)
         WHERE {{
-            # Item principal - debe ser Food
             ?item rdfs:label ?label .
             ?item a dbo:Food .
             
             FILTER(LANG(?label) = "en")
             FILTER({filter_conditions})
             
-            # FILTRO: Debe contener ingredientes típicos de repostería O palabras clave
             FILTER(
-                # Palabras clave de repostería en el nombre
                 CONTAINS(LCASE(?label), "cake") ||
                 CONTAINS(LCASE(?label), "cookie") ||
                 CONTAINS(LCASE(?label), "brownie") ||
@@ -349,69 +489,19 @@ def search_dbpedia_food(term):
                 CONTAINS(LCASE(?label), "pie") ||
                 CONTAINS(LCASE(?label), "pudding") ||
                 CONTAINS(LCASE(?label), "mousse") ||
-                CONTAINS(LCASE(?label), "cheesecake") ||
-                CONTAINS(LCASE(?label), "cupcake") ||
-                CONTAINS(LCASE(?label), "macaron") ||
-                CONTAINS(LCASE(?label), "tiramisu") ||
-                CONTAINS(LCASE(?label), "flan") ||
-                CONTAINS(LCASE(?label), "éclair") ||
-                CONTAINS(LCASE(?label), "donut") ||
-                CONTAINS(LCASE(?label), "doughnut") ||
-                CONTAINS(LCASE(?label), "muffin") ||
-                CONTAINS(LCASE(?label), "pastry") ||
-                CONTAINS(LCASE(?label), "sweet") ||
                 CONTAINS(LCASE(?label), "dessert") ||
                 CONTAINS(LCASE(?label), "chocolate") ||
-                CONTAINS(LCASE(?label), "truffle") ||
-                CONTAINS(LCASE(?label), "candy") ||
-                CONTAINS(LCASE(?label), "confection") ||
-                CONTAINS(LCASE(?label), "biscuit") ||
-                CONTAINS(LCASE(?label), "wafer") ||
-                CONTAINS(LCASE(?label), "meringue") ||
-                CONTAINS(LCASE(?label), "soufflé") ||
-                CONTAINS(LCASE(?label), "parfait") ||
-                CONTAINS(LCASE(?label), "sundae") ||
-                CONTAINS(LCASE(?label), "gelato") ||
-                CONTAINS(LCASE(?label), "sorbet") ||
-                CONTAINS(LCASE(?label), "ice cream") ||
-                CONTAINS(LCASE(?label), "frosting") ||
-                CONTAINS(LCASE(?label), "icing") ||
-                CONTAINS(LCASE(?label), "cream") ||
-                CONTAINS(LCASE(?label), "custard") ||
-                CONTAINS(LCASE(?label), "ganache") ||
-                CONTAINS(LCASE(?label), "glaze") ||
-                CONTAINS(LCASE(?label), "praline") ||
-                CONTAINS(LCASE(?label), "nougat") ||
-                CONTAINS(LCASE(?label), "fondant") ||
-                CONTAINS(LCASE(?label), "danish") ||
-                CONTAINS(LCASE(?label), "croissant") ||
-                CONTAINS(LCASE(?label), "scone") ||
-                CONTAINS(LCASE(?label), "shortbread") ||
-                CONTAINS(LCASE(?label), "sponge") ||
-                CONTAINS(LCASE(?label), "layer cake") ||
-                CONTAINS(LCASE(?label), "torte") ||
-                CONTAINS(LCASE(?label), "strudel") ||
-                CONTAINS(LCASE(?label), "cobbler") ||
-                CONTAINS(LCASE(?label), "crumble") ||
-                CONTAINS(LCASE(?label), "panna cotta") ||
-                CONTAINS(LCASE(?label), "baklava") ||
-                CONTAINS(LCASE(?label), "cannoli") ||
-                CONTAINS(LCASE(?label), "profiterole") ||
-                CONTAINS(LCASE(?label), "choux") ||
-                CONTAINS(LCASE(?label), "creme") ||
-                CONTAINS(LCASE(?label), "crème")
+                CONTAINS(LCASE(?label), "pastry") ||
+                CONTAINS(LCASE(?label), "sweet")
             )
             
-            # Thumbnail (opcional)
             OPTIONAL {{ ?item dbo:thumbnail ?thumbnail . }}
             
-            # Abstract/Descripción (más flexible, acepta cualquier idioma si no hay inglés)
             OPTIONAL {{
                 ?item dbo:abstract ?desc .
                 FILTER(LANG(?desc) = "en")
             }}
             
-            # Ingredientes (más flexible)
             OPTIONAL {{
                 ?item dbo:ingredient ?ingredient .
                 OPTIONAL {{
@@ -420,7 +510,6 @@ def search_dbpedia_food(term):
                 }}
             }}
             
-            # País (busca en múltiples propiedades)
             OPTIONAL {{
                 {{
                     ?item dbo:country ?country .
@@ -435,7 +524,6 @@ def search_dbpedia_food(term):
                 }}
             }}
             
-            # Región
             OPTIONAL {{
                 ?item dbo:region ?region .
                 OPTIONAL {{
@@ -448,7 +536,7 @@ def search_dbpedia_food(term):
         LIMIT 15
         """
         
-        print(f"\n=== Buscando en DBpedia: {term} ===")
+        print(f"\n=== Buscando en DBpedia: {term} (idioma: {language}) ===")
         
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
@@ -465,48 +553,81 @@ def search_dbpedia_food(term):
                 continue
             processed_items.add(item_uri)
             
-            label = result.get("label", {}).get("value", item_uri.split("/")[-1])
+            label_en = result.get("label", {}).get("value", item_uri.split("/")[-1])
             thumbnail_url = result.get("thumbnail", {}).get("value", None)
             
-            print(f"  • {label}")
+            # Traducir nombre al idioma seleccionado
+            if language != 'en':
+                label = translate_text(label_en, 'en', language)
+            else:
+                label = label_en
             
-            # Descripción
-            abstract = result.get("abstract", {}).get("value", "")
+            print(f"  • {label_en} → {label}")
             
-            if not abstract or abstract == "":
-                abstract = "Descripción no disponible en DBpedia"
-            elif len(abstract) > 400:
-                abstract = abstract[:397] + "..."
+            # Descripción en inglés
+            abstract_en = result.get("abstract", {}).get("value", "")
+            
+            # Traducir descripción al idioma seleccionado
+            if abstract_en and language != 'en':
+                abstract = translate_text(abstract_en[:400], 'en', language)
+                if len(abstract) > 300:
+                    abstract = abstract[:297] + "..."
+            elif abstract_en:
+                abstract = abstract_en[:400] if len(abstract_en) > 400 else abstract_en
+            else:
+                if language == 'es':
+                    abstract = "Descripción no disponible"
+                elif language == 'en':
+                    abstract = "Description not available"
+                elif language == 'fr':
+                    abstract = "Description non disponible"
+                elif language == 'it':
+                    abstract = "Descrizione non disponibile"
+                elif language == 'de':
+                    abstract = "Beschreibung nicht verfügbar"
+                elif language == 'pt':
+                    abstract = "Descrição não disponível"
             
             # Ingredientes
             ingredientes = []
             ingredients_str = result.get("ingredients", {}).get("value", "")
-            if ingredients_str and ingredients_str != "":
+            if ingredients_str:
                 raw_ingredients = ingredients_str.split("|")
                 for ing in raw_ingredients[:12]:
                     if ing and ing.strip():
-                        # Limpiar el nombre del ingrediente
                         ing_clean = ing.strip()
-                        # Si es una URI, extraer el nombre
                         if "http://" in ing_clean:
                             ing_clean = ing_clean.split("/")[-1].replace("_", " ")
-                        if ing_clean and ing_clean not in ingredientes:
+                        
+                        # Traducir ingrediente
+                        if language != 'en' and ing_clean:
+                            ing_translated = translate_text(ing_clean, 'en', language)
+                            ingredientes.append(ing_translated)
+                        else:
                             ingredientes.append(ing_clean)
             
             # País y región
-            pais_origen = result.get("countryLabel", {}).get("value", None)
-            region = result.get("regionLabel", {}).get("value", None)
+            pais_origen_en = result.get("countryLabel", {}).get("value", None)
+            region_en = result.get("regionLabel", {}).get("value", None)
             
-            # Limpiar valores vacíos
-            if pais_origen == "":
-                pais_origen = None
-            if region == "":
-                region = None
+            # Traducir país y región
+            pais_origen = None
+            region = None
+            
+            if pais_origen_en and language != 'en':
+                pais_origen = translate_text(pais_origen_en, 'en', language)
+            elif pais_origen_en:
+                pais_origen = pais_origen_en
+            
+            if region_en and language != 'en':
+                region = translate_text(region_en, 'en', language)
+            elif region_en:
+                region = region_en
             
             # Calcular relevancia
             relevance_score = 0
             label_lower = label.lower()
-            for token in search_tokens:
+            for token in tokens:
                 if token.lower() in label_lower:
                     relevance_score += 1
             
@@ -535,6 +656,7 @@ def search_dbpedia_food(term):
                 "atributos": atributos,
                 "usada_en": [],
                 "thumbnail": thumbnail_url,
+                "idioma": language,
                 "fuente": "dbpedia",
                 "relevance": relevance_score
             })
@@ -546,35 +668,38 @@ def search_dbpedia_food(term):
         import traceback
         traceback.print_exc()
     
-    # Ordenar por relevancia
     results.sort(key=lambda x: x.get('relevance', 0), reverse=True)
-    
     return results
-# -----------------------------------------------
-# CONTROLADOR PRINCIPAL
-# -----------------------------------------------
+
+# ===============================================
+# CONTROLADORES
+# ===============================================
 @app.route("/", methods=["GET", "POST"])
 def index():
     term = ""
+    language = request.form.get("language", "es")
     local_results = []
 
     if request.method == "POST":
         term = request.form.get("term", "").strip()
         if term:
-            # Solo resultados locales
-            inst_res = search_instances(term)
-            class_res = search_classes(term)
+            inst_res = search_instances(term, language)
+            class_res = search_classes(term, language)
             local_results = inst_res + class_res
 
-    # Renderizamos solo los resultados locales
-    return render_template("index.html", results=local_results, term=term)
-
+    return render_template("index.html", 
+                         results=local_results, 
+                         term=term, 
+                         languages=LANGUAGES,
+                         current_language=language)
 
 @app.route("/dbpedia_search", methods=["POST"])
 def dbpedia_search():
     term = request.json.get("term", "").strip()
+    language = request.json.get("language", "es")
+    
     if term:
-        dbpedia_results = search_dbpedia_food(term)
+        dbpedia_results = search_dbpedia_food(term, language)
         return jsonify(dbpedia_results)
     return jsonify([])
 

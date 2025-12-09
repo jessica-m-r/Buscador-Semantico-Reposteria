@@ -597,3 +597,41 @@ ul li::before {
         text-align: center;
     }
 }
+
+/* Badge de DBpedia deshabilitado */
+.dbpedia-badge {
+    display: inline-block;
+    font-size: 0.65em;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 8px;
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+.dbpedia-badge.disabled {
+    background-color: #ff6b6b;
+    color: white;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* Mensaje de advertencia */
+.warning-message {
+    background-color: #fff3cd;
+    border: 2px solid #ffc107;
+    color: #856404;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 1.1em;
+    line-height: 1.6;
+}

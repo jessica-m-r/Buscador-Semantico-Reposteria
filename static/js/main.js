@@ -44,7 +44,10 @@ const translations = {
         viewOnDBpedia: 'Ver en DBpedia',
         noImageAvailable: 'Sin imagen disponible',
         imageNotAvailable: 'Imagen no disponible',
-        waitingSearch: 'Esperando búsqueda...'
+        waitingSearch: 'Esperando búsqueda...',
+        dbpediaNotAvailable: 'DBpedia no está disponible para este idioma',
+        dbpediaOnlyAvailable: 'DBpedia solo está disponible en: Español, English y Français',
+        dbpediaDisabled: 'No disponible'
     },
     'en': {
         title: 'Bakery Search Engine',
@@ -84,7 +87,10 @@ const translations = {
         viewOnDBpedia: 'View on DBpedia',
         noImageAvailable: 'No image available',
         imageNotAvailable: 'Image not available',
-        waitingSearch: 'Waiting for search...'
+        waitingSearch: 'Waiting for search...',
+        dbpediaNotAvailable: 'DBpedia is not available for this language',
+        dbpediaOnlyAvailable: 'DBpedia is only available in: Español, English and Français',
+        dbpediaDisabled: 'Not available'
     },
     'fr': {
         title: 'Moteur de Recherche de Pâtisserie',
@@ -124,7 +130,10 @@ const translations = {
         viewOnDBpedia: 'Voir sur DBpedia',
         noImageAvailable: 'Aucune image disponible',
         imageNotAvailable: 'Image non disponible',
-        waitingSearch: 'En attente de recherche...'
+        waitingSearch: 'En attente de recherche...',
+        dbpediaNotAvailable: 'DBpedia n\'est pas disponible pour cette langue',
+        dbpediaOnlyAvailable: 'DBpedia est uniquement disponible en: Español, English et Français',
+        dbpediaDisabled: 'Non disponible'
     },
     'it': {
         title: 'Motore di Ricerca di Pasticceria',
@@ -164,7 +173,10 @@ const translations = {
         viewOnDBpedia: 'Vedi su DBpedia',
         noImageAvailable: 'Nessuna immagine disponibile',
         imageNotAvailable: 'Immagine non disponibile',
-        waitingSearch: 'In attesa di ricerca...'
+        waitingSearch: 'In attesa di ricerca...',
+        dbpediaNotAvailable: 'DBpedia non è disponibile per questa lingua',
+        dbpediaOnlyAvailable: 'DBpedia è disponibile solo in: Español, English e Français',
+        dbpediaDisabled: 'Non disponibile'
     },
     'de': {
         title: 'Backwaren-Suchmaschine',
@@ -204,7 +216,10 @@ const translations = {
         viewOnDBpedia: 'Auf DBpedia ansehen',
         noImageAvailable: 'Kein Bild verfügbar',
         imageNotAvailable: 'Bild nicht verfügbar',
-        waitingSearch: 'Warten auf Suche...'
+        waitingSearch: 'Warten auf Suche...',
+        dbpediaNotAvailable: 'DBpedia ist für diese Sprache nicht verfügbar',
+        dbpediaOnlyAvailable: 'DBpedia ist nur verfügbar in: Español, English und Français',
+        dbpediaDisabled: 'Nicht verfügbar'
     },
     'pt': {
         title: 'Motor de Busca de Confeitaria',
@@ -244,14 +259,25 @@ const translations = {
         viewOnDBpedia: 'Ver no DBpedia',
         noImageAvailable: 'Sem imagem disponível',
         imageNotAvailable: 'Imagem não disponível',
-        waitingSearch: 'Aguardando pesquisa...'
+        waitingSearch: 'Aguardando pesquisa...',
+        dbpediaNotAvailable: 'DBpedia não está disponível para este idioma',
+        dbpediaOnlyAvailable: 'DBpedia está disponível apenas em: Español, English e Français',
+        dbpediaDisabled: 'Não disponível'
     }
 };
+
+// Idiomas habilitados para DBpedia
+const DBPEDIA_ENABLED_LANGUAGES = ['es', 'en', 'fr'];
 
 // Función para obtener texto traducido
 function t(key, lang = null) {
     const currentLang = lang || window.APP_DATA?.currentLanguage || 'es';
     return translations[currentLang]?.[key] || translations['es'][key] || key;
+}
+
+// Función para verificar si DBpedia está habilitado para un idioma
+function isDBpediaEnabled(language) {
+    return DBPEDIA_ENABLED_LANGUAGES.includes(language);
 }
 
 // ==================== APLICAR TRADUCCIONES AL DOM ====================
@@ -269,6 +295,22 @@ function applyTranslations(lang) {
         const translatedText = t(key, lang);
         element.placeholder = translatedText;
     });
+}
+
+// ==================== ACTUALIZAR BADGE DE DBPEDIA ====================
+function updateDBpediaBadge(language) {
+    const badge = document.getElementById('dbpediaBadge');
+    const tabButton = document.getElementById('dbpediaTabButton');
+    
+    if (!isDBpediaEnabled(language)) {
+        badge.textContent = t('dbpediaDisabled', language);
+        badge.className = 'dbpedia-badge disabled';
+        tabButton.title = t('dbpediaOnlyAvailable', language);
+    } else {
+        badge.textContent = '';
+        badge.className = 'dbpedia-badge';
+        tabButton.title = '';
+    }
 }
 
 // ==================== SISTEMA DE PESTAÑAS ====================
@@ -295,6 +337,21 @@ function initTabs() {
 function loadDBpediaResults(term, language) {
     const container = document.getElementById('dbpedia-results-grid');
     const countElement = document.getElementById('dbpedia-count');
+    
+    // Verificar si DBpedia está habilitado para este idioma
+    if (!isDBpediaEnabled(language)) {
+        container.innerHTML = `
+            <div class="no-results warning-message">
+                ⚠️ ${t('dbpediaNotAvailable', language)}
+                <br><br>
+                <small style="opacity: 0.8;">
+                    ${t('dbpediaOnlyAvailable', language)}
+                </small>
+            </div>
+        `;
+        countElement.textContent = t('dbpediaDisabled', language);
+        return;
+    }
     
     if (!term || !term.trim()) {
         container.innerHTML = `
@@ -332,6 +389,21 @@ function loadDBpediaResults(term, language) {
     })
     .then(res => res.json())
     .then(data => {
+        // Verificar si hay error por idioma no habilitado
+        if (data.error === 'dbpedia_disabled') {
+            container.innerHTML = `
+                <div class="no-results warning-message">
+                    ⚠️ ${data.message}
+                    <br><br>
+                    <small style="opacity: 0.8;">
+                        ${t('dbpediaOnlyAvailable', language)}
+                    </small>
+                </div>
+            `;
+            countElement.textContent = t('dbpediaDisabled', language);
+            return;
+        }
+        
         container.innerHTML = '';
         
         if (!data || data.length === 0) {
@@ -487,19 +559,33 @@ function setupSearchValidation() {
         });
     });
 
-    // Detectar cambio de idioma y aplicar traducciones + recargar DBpedia
+    // Detectar cambio de idioma y aplicar traducciones + actualizar badge
     languageSelector.addEventListener('change', function() {
         const newLang = this.value;
         
         // Aplicar traducciones al DOM
         applyTranslations(newLang);
         
-        const currentTerm = searchInput.value.trim();
-        if (currentTerm) {
-            // Si estamos en la pestaña de DBpedia, recargar resultados
-            const dbpediaTab = document.getElementById('dbpedia-tab');
-            if (dbpediaTab.classList.contains('active')) {
-                loadDBpediaResults(currentTerm, newLang);
+        // Actualizar badge de DBpedia
+        updateDBpediaBadge(newLang);
+        
+        // Si hay búsqueda activa y estamos en la pestaña de DBpedia, mostrar mensaje apropiado
+        const searchTerm = searchInput.value.trim();
+        const dbpediaTab = document.getElementById('dbpedia-tab');
+        if (dbpediaTab.classList.contains('active') && searchTerm) {
+            // Limpiar y mostrar mensaje de idioma no disponible si aplica
+            const container = document.getElementById('dbpedia-results-grid');
+            if (!isDBpediaEnabled(newLang)) {
+                container.innerHTML = `
+                    <div class="no-results warning-message">
+                        ⚠️ ${t('dbpediaNotAvailable', newLang)}
+                        <br><br>
+                        <small style="opacity: 0.8;">
+                            ${t('dbpediaOnlyAvailable', newLang)}
+                        </small>
+                    </div>
+                `;
+                document.getElementById('dbpedia-count').textContent = t('dbpediaDisabled', newLang);
             }
         }
     });
@@ -519,6 +605,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Aplicar traducciones iniciales
     applyTranslations(language);
+    
+    // Actualizar badge de DBpedia
+    updateDBpediaBadge(language);
 
     // Si hay un término de búsqueda, cargar resultados de DBpedia
     if (term) {

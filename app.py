@@ -19,13 +19,16 @@ DBPEDIA_ENDPOINT = "https://dbpedia.org/sparql"
 # CONFIGURACIÓN DE IDIOMAS
 # ===============================================
 LANGUAGES = {
-    'es': {'name': 'Español', 'flag': '🇪🇸', 'dbpedia': 'es'},
-    'en': {'name': 'English', 'flag': '🇬🇧', 'dbpedia': 'en'},
-    'fr': {'name': 'Français', 'flag': '🇫🇷', 'dbpedia': 'fr'},
-    'it': {'name': 'Italiano', 'flag': '🇮🇹', 'dbpedia': 'it'},
-    'de': {'name': 'Deutsch', 'flag': '🇩🇪', 'dbpedia': 'de'},
-    'pt': {'name': 'Português', 'flag': '🇵🇹', 'dbpedia': 'pt'}
+    'es': {'name': 'Español', 'flag': '🇪🇸', 'dbpedia': 'es', 'dbpedia_enabled': True},
+    'en': {'name': 'English', 'flag': '🇬🇧', 'dbpedia': 'en', 'dbpedia_enabled': True},
+    'fr': {'name': 'Français', 'flag': '🇫🇷', 'dbpedia': 'fr', 'dbpedia_enabled': True},
+    'it': {'name': 'Italiano', 'flag': '🇮🇹', 'dbpedia': 'it', 'dbpedia_enabled': False},
+    'de': {'name': 'Deutsch', 'flag': '🇩🇪', 'dbpedia': 'de', 'dbpedia_enabled': False},
+    'pt': {'name': 'Português', 'flag': '🇵🇹', 'dbpedia': 'pt', 'dbpedia_enabled': False}
 }
+
+# Idiomas habilitados para DBpedia
+DBPEDIA_ENABLED_LANGUAGES = ['es', 'en', 'fr']
 
 # Cache de traductores
 translators_cache = {}
@@ -440,220 +443,206 @@ def search_classes(term, language='es'):
     return results
 
 # ===============================================
-# BÚSQUEDA EN DBPEDIA CON TRADUCCIÓN AUTOMÁTICA
+# CONFIGURACIÓN DE ENDPOINTS DBPEDIA POR IDIOMA
 # ===============================================
+DBPEDIA_ENDPOINTS = {
+    'es': 'https://es.dbpedia.org/sparql',
+    'en': 'https://dbpedia.org/sparql',
+    'fr': 'https://fr.dbpedia.org/sparql',
+    'it': 'https://it.dbpedia.org/sparql',
+    'de': 'https://de.dbpedia.org/sparql',
+    'pt': 'https://pt.dbpedia.org/sparql'
+}
+
+# Palabras clave de postres por idioma
+DESSERT_KEYWORDS = {
+    'es': ['pastel', 'tarta', 'galleta', 'postre', 'dulce', 'chocolate', 'helado', 'flan', 'natilla', 'mousse', 'brownie'],
+    'en': ['cake', 'cookie', 'brownie', 'tart', 'pie', 'pudding', 'mousse', 'dessert', 'chocolate', 'pastry', 'sweet', 'ice cream'],
+    'fr': ['gâteau', 'tarte', 'biscuit', 'dessert', 'chocolat', 'mousse', 'pâtisserie', 'glace', 'crème']
+}
+
 def search_dbpedia_food(term, language='es'):
     """
-    Búsqueda en DBpedia con traducción automática al idioma seleccionado
+    Búsqueda en DBpedia usando estrategia híbrida CORREGIDA
+    Solo funciona para idiomas habilitados: español, inglés y francés
     """
+    # VERIFICAR SI EL IDIOMA ESTÁ HABILITADO PARA DBPEDIA
+    if language not in DBPEDIA_ENABLED_LANGUAGES:
+        print(f"❌ DBpedia no habilitado para el idioma: {language}")
+        return []
+    
     tokens = tokenize_search_term(term)
     
     if not tokens:
         return []
     
-    # Traducir términos de búsqueda al inglés (DBpedia funciona mejor en inglés)
-    search_tokens_en = []
-    for token in tokens:
-        if language != 'en':
-            translated = translate_text(token, language, 'en')
-            search_tokens_en.append(translated)
-        else:
-            search_tokens_en.append(token)
+    print(f"🌐 Búsqueda DBpedia habilitada para: {LANGUAGES[language]['name']}")
+    
+    # Búsqueda normal solo para idiomas permitidos
+    print(f"  → Intentando en {language}.dbpedia.org...")
+    results = _search_in_endpoint(tokens, language, language)
+    
+    # Solo si NO hay resultados, intentar en el endpoint principal
+    if len(results) == 0 and language != 'en':
+        print(f"  → No se encontraron resultados en {language}.dbpedia.org")
+        print(f"  → Buscando en dbpedia.org con etiquetas en {language}...")
+        results = _search_in_endpoint(tokens, language, 'en', search_in_main=True)
+    else:
+        print(f"  ✓ Encontrados {len(results)} resultados en {language}.dbpedia.org")
+    
+    return results
+
+
+def _search_in_endpoint(tokens, display_language, endpoint_language, search_in_main=False):
+    """
+    Función auxiliar para buscar en un endpoint específico - VERSIÓN CORREGIDA
+    """
+    if search_in_main:
+        endpoint = DBPEDIA_ENDPOINTS['en']
+        label_lang = display_language
+        endpoint_name = f"dbpedia.org (etiquetas: {display_language})"
+    else:
+        endpoint = DBPEDIA_ENDPOINTS.get(endpoint_language, DBPEDIA_ENDPOINTS['en'])
+        label_lang = endpoint_language
+        endpoint_name = endpoint.replace('https://', '').replace('/sparql', '')
+    
+    dessert_keywords = DESSERT_KEYWORDS.get(display_language, DESSERT_KEYWORDS['en'])
     
     results = []
     
     try:
-        sparql = SPARQLWrapper(DBPEDIA_ENDPOINT)
-        sparql.setTimeout(15)
+        sparql = SPARQLWrapper(endpoint)
+        sparql.setTimeout(30)
         
-        filter_conditions = " || ".join([
-            f'CONTAINS(LCASE(?label), LCASE("{token}"))' 
-            for token in search_tokens_en
-        ])
+        # Crear filtro simple solo con el primer token
+        main_token = tokens[0] if tokens else ""
         
+        # Versión sin acentos
+        import unicodedata
+        nfd = unicodedata.normalize('NFD', main_token)
+        token_normalized = ''.join(char for char in nfd if unicodedata.category(char) != 'Mn')
+        
+        if token_normalized.lower() != main_token.lower():
+            filter_conditions = f'(CONTAINS(LCASE(?label), LCASE("{main_token}")) || CONTAINS(LCASE(?label), LCASE("{token_normalized}")))'
+        else:
+            filter_conditions = f'CONTAINS(LCASE(?label), LCASE("{main_token}"))'
+        
+        # Construir prefijo de propiedades según idioma del endpoint
+        if endpoint_language == 'es':
+            prop_prefix = 'http://es.dbpedia.org/property/'
+            ingredient_props = ['ingredientes', 'ingredients']
+        elif endpoint_language == 'fr':
+            prop_prefix = 'http://fr.dbpedia.org/property/'
+            ingredient_props = ['ingrédients', 'ingredients']
+        else:  # English
+            prop_prefix = 'http://dbpedia.org/property/'
+            ingredient_props = ['ingredients', 'ingredient']
+        
+        # CONSULTA SIMPLIFICADA Y OPTIMIZADA
         query = f"""
-        PREFIX dbo: <http://dbpedia.org/ontology/>
-        PREFIX dbp: <http://dbpedia.org/property/>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-        PREFIX dct: <http://purl.org/dc/terms/>
+        PREFIX dbo: <http://dbpedia.org/ontology/>
+        PREFIX dbp: <{prop_prefix}>
         
-        SELECT DISTINCT 
-            ?item 
-            ?label 
-            ?thumbnail
-            (SAMPLE(?desc) AS ?abstract)
-            (GROUP_CONCAT(DISTINCT ?ingredientName; separator="|") AS ?ingredients)
-            (SAMPLE(?countryName) AS ?countryLabel)
-            (SAMPLE(?regionName) AS ?regionLabel)
+        SELECT DISTINCT ?item ?label ?thumbnail ?desc
         WHERE {{
             ?item rdfs:label ?label .
-            ?item a dbo:Food .
-            
-            FILTER(LANG(?label) = "en")
+            FILTER(LANG(?label) = "{label_lang}")
             FILTER({filter_conditions})
-            
-            FILTER(
-                CONTAINS(LCASE(?label), "cake") ||
-                CONTAINS(LCASE(?label), "cookie") ||
-                CONTAINS(LCASE(?label), "brownie") ||
-                CONTAINS(LCASE(?label), "tart") ||
-                CONTAINS(LCASE(?label), "pie") ||
-                CONTAINS(LCASE(?label), "pudding") ||
-                CONTAINS(LCASE(?label), "mousse") ||
-                CONTAINS(LCASE(?label), "dessert") ||
-                CONTAINS(LCASE(?label), "chocolate") ||
-                CONTAINS(LCASE(?label), "pastry") ||
-                CONTAINS(LCASE(?label), "sweet")
-            )
             
             OPTIONAL {{ ?item dbo:thumbnail ?thumbnail . }}
             
             OPTIONAL {{
                 ?item dbo:abstract ?desc .
-                FILTER(LANG(?desc) = "en")
-            }}
-            
-            OPTIONAL {{
-                ?item dbo:ingredient ?ingredient .
-                OPTIONAL {{
-                    ?ingredient rdfs:label ?ingredientName .
-                    FILTER(LANG(?ingredientName) = "en")
-                }}
-            }}
-            
-            OPTIONAL {{
-                {{
-                    ?item dbo:country ?country .
-                }}
-                UNION
-                {{
-                    ?item dbp:country ?country .
-                }}
-                OPTIONAL {{
-                    ?country rdfs:label ?countryName .
-                    FILTER(LANG(?countryName) = "en")
-                }}
-            }}
-            
-            OPTIONAL {{
-                ?item dbo:region ?region .
-                OPTIONAL {{
-                    ?region rdfs:label ?regionName .
-                    FILTER(LANG(?regionName) = "en")
-                }}
+                FILTER(LANG(?desc) = "{label_lang}")
             }}
         }}
-        GROUP BY ?item ?label ?thumbnail
         LIMIT 5
         """
         
-        print(f"\n=== Buscando en DBpedia: {term} (idioma: {language}) ===")
+        print(f"\n=== Buscando en {endpoint_name}: {' '.join(tokens)} ===")
         
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         query_results = sparql.query().convert()
         
-        print(f"Resultados encontrados: {len(query_results['results']['bindings'])}")
+        bindings = query_results['results']['bindings']
+        print(f"✓ Encontrados {len(bindings)} resultados")
         
         processed_items = set()
         
-        for result in query_results["results"]["bindings"]:
+        for result in bindings:
             item_uri = result["item"]["value"]
             
             if item_uri in processed_items:
                 continue
             processed_items.add(item_uri)
             
-            label_en = result.get("label", {}).get("value", item_uri.split("/")[-1])
+            label = result.get("label", {}).get("value", item_uri.split("/")[-1])
             thumbnail_url = result.get("thumbnail", {}).get("value", None)
             
-            # Traducir nombre al idioma seleccionado
-            if language != 'en':
-                label = translate_text(label_en, 'en', language)
-            else:
-                label = label_en
+            print(f"  • {label}")
             
-            print(f"  • {label_en} → {label}")
+            # Descripción
+            abstract = result.get("desc", {}).get("value", "")
             
-            # Descripción en inglés
-            abstract_en = result.get("abstract", {}).get("value", "")
+            if abstract and len(abstract) > 300:
+                abstract = abstract[:297] + "..."
+            elif not abstract:
+                no_description = {
+                    'es': 'Descripción no disponible',
+                    'en': 'Description not available',
+                    'fr': 'Description non disponible'
+                }
+                abstract = no_description.get(display_language, 'No description')
             
-            # Traducir descripción al idioma seleccionado
-            if abstract_en and language != 'en':
-                abstract = translate_text(abstract_en[:400], 'en', language)
-                if len(abstract) > 300:
-                    abstract = abstract[:297] + "..."
-            elif abstract_en:
-                abstract = abstract_en[:400] if len(abstract_en) > 400 else abstract_en
-            else:
-                if language == 'es':
-                    abstract = "Descripción no disponible"
-                elif language == 'en':
-                    abstract = "Description not available"
-                elif language == 'fr':
-                    abstract = "Description non disponible"
-                elif language == 'it':
-                    abstract = "Descrizione non disponibile"
-                elif language == 'de':
-                    abstract = "Beschreibung nicht verfügbar"
-                elif language == 'pt':
-                    abstract = "Descrição não disponível"
-            
-            # Ingredientes
+            # Obtener ingredientes en una segunda consulta MÁS LIGERA
             ingredientes = []
-            ingredients_str = result.get("ingredients", {}).get("value", "")
-            if ingredients_str:
-                raw_ingredients = ingredients_str.split("|")
-                for ing in raw_ingredients[:12]:
-                    if ing and ing.strip():
-                        ing_clean = ing.strip()
+            try:
+                ing_query = f"""
+                PREFIX dbp: <{prop_prefix}>
+                PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                PREFIX dbo: <http://dbpedia.org/ontology/>
+                
+                SELECT ?ing WHERE {{
+                    <{item_uri}> dbp:{ingredient_props[0]} ?ing .
+                }}
+                LIMIT 5
+                """
+                
+                sparql.setQuery(ing_query)
+                ing_results = sparql.query().convert()
+                
+                for ing_result in ing_results['results']['bindings']:
+                    ing_value = ing_result.get('ing', {}).get('value', '')
+                    if ing_value:
+                        # Limpiar
+                        ing_clean = ing_value.strip()
                         if "http://" in ing_clean:
                             ing_clean = ing_clean.split("/")[-1].replace("_", " ")
-                        
-                        # Traducir ingrediente
-                        if language != 'en' and ing_clean:
-                            ing_translated = translate_text(ing_clean, 'en', language)
-                            ingredientes.append(ing_translated)
-                        else:
+                        ing_clean = re.sub(r'\([^)]*\)', '', ing_clean).strip()
+                        if ing_clean and len(ing_clean) > 1:
                             ingredientes.append(ing_clean)
-            
-            # País y región
-            pais_origen_en = result.get("countryLabel", {}).get("value", None)
-            region_en = result.get("regionLabel", {}).get("value", None)
-            
-            # Traducir país y región
-            pais_origen = None
-            region = None
-            
-            if pais_origen_en and language != 'en':
-                pais_origen = translate_text(pais_origen_en, 'en', language)
-            elif pais_origen_en:
-                pais_origen = pais_origen_en
-            
-            if region_en and language != 'en':
-                region = translate_text(region_en, 'en', language)
-            elif region_en:
-                region = region_en
+            except:
+                pass  # Si falla la consulta de ingredientes, continuar sin ellos
             
             # Calcular relevancia
             relevance_score = 0
             label_lower = label.lower()
             for token in tokens:
                 if token.lower() in label_lower:
-                    relevance_score += 1
+                    relevance_score += 3
             
-            # Construir atributos
+            for ing in ingredientes:
+                for token in tokens:
+                    if token.lower() in ing.lower():
+                        relevance_score += 1
+            
+            # Construir resultado
             atributos = {
-                "descripcion": [abstract]
+                "descripcion": [abstract],
+                "dbpedia_uri": [item_uri]
             }
-            
-            if pais_origen:
-                atributos["pais_origen"] = [pais_origen]
-            
-            if region:
-                atributos["region"] = [region]
-            
-            atributos["dbpedia_uri"] = [item_uri]
             
             results.append({
                 "tipo": "instancia",
@@ -667,17 +656,21 @@ def search_dbpedia_food(term, language='es'):
                 "atributos": atributos,
                 "usada_en": [],
                 "thumbnail": thumbnail_url,
-                "idioma": language,
-                "fuente": "dbpedia",
+                "idioma": LANGUAGES[display_language]['name'],
+                "fuente": f"dbpedia ({endpoint_name})",
                 "relevance": relevance_score
             })
         
-        print(f"Total procesados: {len(results)}\n")
+        print(f"✓ Procesados {len(results)} resultados correctamente\n")
         
     except Exception as e:
-        print(f"Error consultando DBpedia: {e}")
-        import traceback
-        traceback.print_exc()
+        error_msg = str(e)
+        print(f"✗ Error en {endpoint_name}: {error_msg[:100]}")
+        
+        if "timeout" in error_msg.lower() or "10060" in error_msg:
+            print(f"  → Timeout de conexión")
+        elif "500" in error_msg:
+            print(f"  → Error del servidor")
     
     results.sort(key=lambda x: x.get('relevance', 0), reverse=True)
     return results
@@ -708,6 +701,14 @@ def index():
 def dbpedia_search():
     term = request.json.get("term", "").strip()
     language = request.json.get("language", "es")
+    
+    # Verificar si el idioma está habilitado para DBpedia
+    if language not in DBPEDIA_ENABLED_LANGUAGES:
+        return jsonify({
+            "error": "dbpedia_disabled",
+            "message": f"DBpedia no está disponible para {LANGUAGES[language]['name']}",
+            "enabled_languages": DBPEDIA_ENABLED_LANGUAGES
+        })
     
     if term:
         dbpedia_results = search_dbpedia_food(term, language)

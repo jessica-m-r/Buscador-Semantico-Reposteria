@@ -26,7 +26,8 @@
                 <select name="language" id="languageSelector" class="language-selector">
                     {% for code, info in languages.items() %}
                     <option value="{{ code }}" 
-                            {% if code == current_language %}selected{% endif %}>
+                            {% if code == current_language %}selected{% endif %}
+                            data-dbpedia-enabled="{{ info.dbpedia_enabled }}">
                         {{ info.flag }} {{ info.name }}
                     </option>
                     {% endfor %}
@@ -55,8 +56,9 @@
             <button class="tab-button active" data-tab="local-tab">
                 📍 <span data-translate="localResults">Resultados Locales</span>
             </button>
-            <button class="tab-button" data-tab="dbpedia-tab">
+            <button class="tab-button" data-tab="dbpedia-tab" id="dbpediaTabButton">
                 🌐 <span data-translate="dbpediaResults">Resultados DBpedia</span>
+                <span class="dbpedia-badge" id="dbpediaBadge"></span>
             </button>
         </div>
 

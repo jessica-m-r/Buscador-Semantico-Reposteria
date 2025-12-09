@@ -693,8 +693,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Almendras">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
-        <descripcion>Fruto seco molido o fileteado</descripcion>
-        <nombre>Almendras</nombre>
+        <descripcion xml:lang="es">Fruto seco molido o fileteado</descripcion>
+        <nombre xml:lang="es">Almendras</nombre>
     </owl:NamedIndividual>
     
 
@@ -714,8 +714,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Batidora"/>
-        <descripcion>Batidora electrica de pie o mano</descripcion>
-        <nombre>Batidora Electrica</nombre>
+        <descripcion xml:lang="es">Batidora electrica de pie o mano</descripcion>
+        <nombre xml:lang="es">Batidora Electrica</nombre>
     </owl:NamedIndividual>
     
 
@@ -724,8 +724,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Bicarbonato">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Aditivo"/>
-        <descripcion>Agente leudante</descripcion>
-        <nombre>Bicarbonato</nombre>
+        <descripcion xml:lang="es">Agente leudante</descripcion>
+        <nombre xml:lang="es">Bicarbonato</nombre>
     </owl:NamedIndividual>
     
 
@@ -743,12 +743,12 @@
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MoldeRedondo"/>
-        <idioma>español</idioma>
-        <nivelDificultad>Facil</nivelDificultad>
-        <nombre>Bizcocho Simple</nombre>
-        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</porciones>
-        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">180</temperatura>
-        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">50</tiempoPreparacion>
+        <idioma>Español</idioma>
+        <nivelDificultad xml:lang="es">Facil</nivelDificultad>
+        <nombre xml:lang="es">Bizcocho Simple</nombre>
+        <porciones xml:lang="es">8</porciones>
+        <temperatura xml:lang="es">180</temperatura>
+        <tiempoPreparacion xml:lang="es">50</tiempoPreparacion>
     </owl:NamedIndividual>
     
 
@@ -768,30 +768,30 @@
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MoldeRedondo"/>
-        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">28.5</azucarGramos>
-        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">320</calorias>
-        <color>Marrón oscuro</color>
-        <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">8.50</costoAproximado>
-        <descripcion>Brownie denso y chocolatoso con nueces</descripcion>
-        <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esCongelable>
-        <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
-        <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
-        <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">18.2</grasaGramos>
-        <idioma>español</idioma>
-        <nivelDificultad>Facil</nivelDificultad>
-        <nombre>Brownie de Chocolate</nombre>
-        <paisOrigen>Estados Unidos</paisOrigen>
-        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">800</peso>
-        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">12</porciones>
-        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</requiereRefrigeracion>
-        <sabor>Chocolate intenso</sabor>
-        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">180</temperatura>
-        <textura>Denso y húmedo</textura>
-        <tiempoCoccion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</tiempoCoccion>
-        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</tiempoConservacion>
-        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">45</tiempoPreparacion>
-        <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneGluten>
-        <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneLactosa>
+        <azucarGramos xml:lang="es">28.5</azucarGramos>
+        <calorias xml:lang="es">320</calorias>
+        <color xml:lang="es">Marrón oscuro</color>
+        <costoAproximado xml:lang="es">8.50</costoAproximado>
+        <descripcion xml:lang="es">Brownie denso y chocolatoso con nuecess</descripcion>
+        <esCongelable xml:lang="es">true</esCongelable>
+        <esTradicional xml:lang="es">true</esTradicional>
+        <esVegano xml:lang="es">false</esVegano>
+        <grasaGramos xml:lang="es">18.2</grasaGramos>
+        <idioma>Español</idioma>
+        <nivelDificultad xml:lang="es">Facil</nivelDificultad>
+        <nombre xml:lang="es">Brownie de Chocolate</nombre>
+        <paisOrigen xml:lang="es">Estados Unidos</paisOrigen>
+        <peso xml:lang="es">800</peso>
+        <porciones xml:lang="es">12</porciones>
+        <requiereRefrigeracion xml:lang="es">false</requiereRefrigeracion>
+        <sabor xml:lang="es">Chocolate intenso</sabor>
+        <temperatura xml:lang="es">180</temperatura>
+        <textura xml:lang="es">Denso y húmedo</textura>
+        <tiempoCoccion xml:lang="es">30</tiempoCoccion>
+        <tiempoConservacion xml:lang="es">5</tiempoConservacion>
+        <tiempoPreparacion xml:lang="es">45</tiempoPreparacion>
+        <tieneGluten xml:lang="es">true</tieneGluten>
+        <tieneLactosa xml:lang="es">true</tieneLactosa>
     </owl:NamedIndividual>
     
 
@@ -800,8 +800,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Cafe">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
-        <descripcion>Cafe soluble o espresso</descripcion>
-        <nombre>Cafe</nombre>
+        <descripcion xml:lang="es">Cafe soluble o espresso</descripcion>
+        <nombre xml:lang="es">Cafe</nombre>
     </owl:NamedIndividual>
     
 
@@ -810,8 +810,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Canela">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Aditivo"/>
-        <descripcion>Especia aromática</descripcion>
-        <nombre>Canela</nombre>
+        <descripcion xml:lang="es">Especia aromática</descripcion>
+        <nombre xml:lang="es">Canela</nombre>
     </owl:NamedIndividual>
     
 
@@ -830,31 +830,31 @@
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Nata"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MoldeRedondo"/>
-        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">32.0</azucarGramos>
-        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">420</calorias>
-        <color>Blanco cremoso</color>
-        <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">18.00</costoAproximado>
-        <descripcion>Tarta de queso horneada con base de galleta</descripcion>
-        <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esCongelable>
-        <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
-        <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
-        <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">28.5</grasaGramos>
-        <idioma>español</idioma>
-        <nivelDificultad>Medio</nivelDificultad>
-        <nombre>Cheesecake Clasico</nombre>
-        <paisOrigen>Estados Unidos</paisOrigen>
-        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1300</peso>
-        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</porciones>
-        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</requiereRefrigeracion>
-        <sabor>Queso suave</sabor>
-        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">165</temperatura>
-        <textura>Cremoso y denso</textura>
-        <tiempoCoccion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">60</tiempoCoccion>
-        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</tiempoConservacion>
-        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90</tiempoPreparacion>
-        <tiempoReposo rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">480</tiempoReposo>
-        <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneGluten>
-        <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneLactosa>
+        <azucarGramos xml:lang="es">32.0</azucarGramos>
+        <calorias xml:lang="es">420</calorias>
+        <color xml:lang="es">Blanco cremoso</color>
+        <costoAproximado xml:lang="es">18.00</costoAproximado>
+        <descripcion xml:lang="es">Tarta de queso horneada con base de galleta</descripcion>
+        <esCongelable xml:lang="es">true</esCongelable>
+        <esTradicional xml:lang="es">true</esTradicional>
+        <esVegano xml:lang="es">false</esVegano>
+        <grasaGramos xml:lang="es">28.5</grasaGramos>
+        <idioma>Español</idioma>
+        <nivelDificultad xml:lang="es">Medio</nivelDificultad>
+        <nombre xml:lang="es">Cheesecake Clasico</nombre>
+        <paisOrigen xml:lang="es">Estados Unidos</paisOrigen>
+        <peso xml:lang="es">1300</peso>
+        <porciones xml:lang="es">10</porciones>
+        <requiereRefrigeracion xml:lang="es">true</requiereRefrigeracion>
+        <sabor xml:lang="es">Queso suave</sabor>
+        <temperatura xml:lang="es">165</temperatura>
+        <textura xml:lang="es">Cremoso y denso</textura>
+        <tiempoCoccion xml:lang="es">60</tiempoCoccion>
+        <tiempoConservacion xml:lang="es">7</tiempoConservacion>
+        <tiempoPreparacion xml:lang="es">90</tiempoPreparacion>
+        <tiempoReposo xml:lang="es">480</tiempoReposo>
+        <tieneGluten xml:lang="es">true</tieneGluten>
+        <tieneLactosa xml:lang="es">true</tieneLactosa>
     </owl:NamedIndividual>
     
 
@@ -875,8 +875,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Coco">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
-        <descripcion>Rallado o en hojuelas</descripcion>
-        <nombre>Coco</nombre>
+        <descripcion xml:lang="es">Rallado o en hojuelas</descripcion>
+        <nombre xml:lang="es">Coco</nombre>
     </owl:NamedIndividual>
     
 
@@ -885,8 +885,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#ColoranteRojo">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Aditivo"/>
-        <descripcion>Colorante alimentario</descripcion>
-        <nombre>Colorante Rojo</nombre>
+        <descripcion xml:lang="es">Colorante alimentario</descripcion>
+        <nombre xml:lang="es">Colorante Rojo</nombre>
     </owl:NamedIndividual>
     
 
@@ -908,30 +908,30 @@
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MangaPastelera01"/>
-        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">38.0</azucarGramos>
-        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">305</calorias>
-        <color>Amarillo claro</color>
-        <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">10.00</costoAproximado>
-        <descripcion>Pequeños pasteles individuales con frosting</descripcion>
-        <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esCongelable>
-        <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
-        <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
-        <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">14.0</grasaGramos>
-        <idioma>español</idioma>
-        <nivelDificultad>Facil</nivelDificultad>
-        <nombre>Cupcakes de Vainilla</nombre>
-        <paisOrigen>Estados Unidos</paisOrigen>
-        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">600</peso>
-        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">12</porciones>
-        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</requiereRefrigeracion>
-        <sabor>Vainilla dulce</sabor>
-        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">175</temperatura>
-        <textura>Esponjoso</textura>
-        <tiempoCoccion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</tiempoCoccion>
-        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</tiempoConservacion>
-        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">50</tiempoPreparacion>
-        <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneGluten>
-        <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneLactosa>
+        <azucarGramos xml:lang="es">38.0</azucarGramos>
+        <calorias xml:lang="es">305</calorias>
+        <color xml:lang="es">Amarillo claro</color>
+        <costoAproximado xml:lang="es">10.00</costoAproximado>
+        <descripcion xml:lang="es">Pequeños pasteles individuales con frosting</descripcion>
+        <esCongelable xml:lang="es">true</esCongelable>
+        <esTradicional xml:lang="es">true</esTradicional>
+        <esVegano xml:lang="es">false</esVegano>
+        <grasaGramos xml:lang="es">14.0</grasaGramos>
+        <idioma>Español</idioma>
+        <nivelDificultad xml:lang="es">Facil</nivelDificultad>
+        <nombre xml:lang="es">Cupcakes de Vainilla</nombre>
+        <paisOrigen xml:lang="es">Estados Unidos</paisOrigen>
+        <peso xml:lang="es">600</peso>
+        <porciones xml:lang="es">12</porciones>
+        <requiereRefrigeracion xml:lang="es">false</requiereRefrigeracion>
+        <sabor xml:lang="es">Vainilla dulce</sabor>
+        <temperatura xml:lang="es">175</temperatura>
+        <textura xml:lang="es">Esponjoso</textura>
+        <tiempoCoccion xml:lang="es">20</tiempoCoccion>
+        <tiempoConservacion xml:lang="es">3</tiempoConservacion>
+        <tiempoPreparacion xml:lang="es">50</tiempoPreparacion>
+        <tieneGluten xml:lang="es">true</tieneGluten>
+        <tieneLactosa xml:lang="es">true</tieneLactosa>
     </owl:NamedIndividual>
     
 
@@ -3017,8 +3017,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#EsenciaVainilla">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Aditivo"/>
-        <descripcion>Extracto concentrado de vainilla</descripcion>
-        <nombre>Esencia de Vainilla</nombre>
+        <descripcion xml:lang="es">Extracto concentrado de vainilla</descripcion>
+        <nombre xml:lang="es">Esencia de Vainilla</nombre>
     </owl:NamedIndividual>
     
 
@@ -3727,12 +3727,12 @@
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Leche"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MoldeRedondo"/>
-        <idioma>español</idioma>
-        <nivelDificultad>Medio</nivelDificultad>
-        <nombre>Flan de Leche</nombre>
-        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</porciones>
-        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">160</temperatura>
-        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">60</tiempoPreparacion>
+        <idioma>Español</idioma>
+        <nivelDificultad xml:lang="es">Medio</nivelDificultad>
+        <nombre xml:lang="es">Flan de Leche</nombre>
+        <porciones xml:lang="es">8</porciones>
+        <temperatura xml:lang="es">160</temperatura>
+        <tiempoPreparacion xml:lang="es">60</tiempoPreparacion>
     </owl:NamedIndividual>
     
 
@@ -3741,8 +3741,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Fresas">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
-        <descripcion>Fruta fresca</descripcion>
-        <nombre>Fresas</nombre>
+        <descripcion xml:lang="es">Fruta fresca</descripcion>
+        <nombre xml:lang="es">Fresas</nombre>
     </owl:NamedIndividual>
     
 
@@ -3760,28 +3760,28 @@
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
-        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">12.5</azucarGramos>
-        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">140</calorias>
-        <color>Marrón</color>
+        <azucarGramos xml:lang="es">12.5</azucarGramos>
+        <calorias xml:lang="es">140</calorias>
+        <color xml:lang="es">Marrón</color>
         <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">7.00</costoAproximado>
         <descripcion>Galletas con chips de chocolate</descripcion>
         <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esCongelable>
         <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
         <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
         <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">7.0</grasaGramos>
-        <idioma>español</idioma>
-        <nivelDificultad>Facil</nivelDificultad>
-        <nombre>Galletas de Chocolate</nombre>
-        <paisOrigen>Estados Unidos</paisOrigen>
-        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">500</peso>
-        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</porciones>
-        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</requiereRefrigeracion>
-        <sabor>Chocolate dulce</sabor>
-        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">175</temperatura>
-        <textura>Crujiente por fuera, suave por dentro</textura>
-        <tiempoCoccion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15</tiempoCoccion>
-        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</tiempoConservacion>
-        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">35</tiempoPreparacion>
+        <idioma>Español</idioma>
+        <nivelDificultad xml:lang="es">Facil</nivelDificultad>
+        <nombre xml:lang="es">Galletas de Chocolate</nombre>
+        <paisOrigen xml:lang="es">Estados Unidos</paisOrigen>
+        <peso xml:lang="es">500</peso>
+        <porciones xml:lang="es">20</porciones>
+        <requiereRefrigeracion xml:lang="es">false</requiereRefrigeracion>
+        <sabor xml:lang="es">Chocolate dulce</sabor>
+        <temperatura xml:lang="es">175</temperatura>
+        <textura xml:lang="es">Crujiente por fuera, suave por dentro</textura>
+        <tiempoCoccion xml:lang="es">15</tiempoCoccion>
+        <tiempoConservacion xml:lang="es">10</tiempoConservacion>
+        <tiempoPreparacion xml:lang="es">35</tiempoPreparacion>
         <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneGluten>
         <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneLactosa>
     </owl:NamedIndividual>
@@ -3801,12 +3801,12 @@
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional"/>
-        <idioma>español</idioma>
-        <nivelDificultad>Facil</nivelDificultad>
-        <nombre>Galletas de Vainilla</nombre>
-        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">24</porciones>
-        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">170</temperatura>
-        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</tiempoPreparacion>
+        <idioma>Español</idioma>
+        <nivelDificultad xml:lang="es">Facil</nivelDificultad>
+        <nombre xml:lang="es">Galletas de Vainilla</nombre>
+        <porciones xml:lang="es">24</porciones>
+        <temperatura xml:lang="es">170</temperatura>
+        <tiempoPreparacion xml:lang="es">30</tiempoPreparacion>
     </owl:NamedIndividual>
     
 
@@ -3826,8 +3826,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Horno"/>
-        <descripcion>Horno electrico o a gas</descripcion>
-        <nombre>Horno Convencional</nombre>
+        <descripcion xml:lang="es">Horno electrico o a gas</descripcion>
+        <nombre xml:lang="es">Horno Convencional</nombre>
     </owl:NamedIndividual>
     
 
@@ -8759,8 +8759,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Levadura">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Aditivo"/>
-        <descripcion>Polvo para hornear</descripcion>
-        <nombre>Levadura</nombre>
+        <descripcion xml:lang="es">Polvo para hornear</descripcion>
+        <nombre xml:lang="es">Levadura</nombre>
     </owl:NamedIndividual>
     
 
@@ -8769,8 +8769,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Limon">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
-        <descripcion>Citrico para sabor y decoracion</descripcion>
-        <nombre>Limon</nombre>
+        <descripcion xml:lang="es">Citrico para sabor y decoracion</descripcion>
+        <nombre xml:lang="es">Limon</nombre>
     </owl:NamedIndividual>
     
 
@@ -8788,30 +8788,30 @@
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MangaPastelera01"/>
-        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">10.0</azucarGramos>
-        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">80</calorias>
-        <color>Variado</color>
-        <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">20.00</costoAproximado>
-        <descripcion>Galletas francesas de almendra con relleno</descripcion>
-        <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esCongelable>
-        <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
-        <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
+        <azucarGramos xml:lang="es">10.0</azucarGramos>
+        <calorias xml:lang="es">80</calorias>
+        <color xml:lang="es">Variado</color>
+        <costoAproximado xml:lang="es">20.00</costoAproximado>
+        <descripcion xml:lang="es">Galletas francesas de almendra con relleno</descripcion>
+        <esCongelable xml:lang="es">true</esCongelable>
+        <esTradicional xml:lang="es">true</esTradicional>
+        <esVegano xml:lang="es">false</esVegano>
         <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">3.5</grasaGramos>
-        <idioma>español</idioma>
-        <nivelDificultad>Dificil</nivelDificultad>
-        <nombre>Macarons</nombre>
-        <paisOrigen>Francia</paisOrigen>
-        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">450</peso>
-        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</porciones>
-        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</requiereRefrigeracion>
-        <sabor>Almendra dulce</sabor>
-        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">150</temperatura>
-        <textura>Crujiente por fuera, suave por dentro</textura>
-        <tiempoCoccion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15</tiempoCoccion>
-        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</tiempoConservacion>
-        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">120</tiempoPreparacion>
-        <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</tieneGluten>
-        <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</tieneLactosa>
+        <idioma>Español</idioma>
+        <nivelDificultad xml:lang="es">Dificil</nivelDificultad>
+        <nombre xml:lang="es">Macarons</nombre>
+        <paisOrigen xml:lang="es">Francia</paisOrigen>
+        <peso xml:lang="es">450</peso>
+        <porciones xml:lang="es">30</porciones>
+        <requiereRefrigeracion xml:lang="es">false</requiereRefrigeracion>
+        <sabor xml:lang="es">Almendra dulce</sabor>
+        <temperatura xml:lang="es">150</temperatura>
+        <textura xml:lang="es">Crujiente por fuera, suave por dentro</textura>
+        <tiempoCoccion xml:lang="es">15</tiempoCoccion>
+        <tiempoConservacion xml:lang="es">7</tiempoConservacion>
+        <tiempoPreparacion xml:lang="es">120</tiempoPreparacion>
+        <tieneGluten xml:lang="es">false</tieneGluten>
+        <tieneLactosa xml:lang="es">false</tieneLactosa>
     </owl:NamedIndividual>
     
 
@@ -8820,8 +8820,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#MangaPastelera01">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MangaPastelera"/>
-        <descripcion>Bolsa con boquillas para decorar</descripcion>
-        <nombre>Manga Pastelera</nombre>
+        <descripcion xml:lang="es">Bolsa con boquillas para decorar</descripcion>
+        <nombre xml:lang="es">Manga Pastelera</nombre>
     </owl:NamedIndividual>
     
 
@@ -8841,8 +8841,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Manzana">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
-        <descripcion>Fruta para rellenos</descripcion>
-        <nombre>Manzana</nombre>
+        <descripcion xml:lang="es">Fruta para rellenos</descripcion>
+        <nombre xml:lang="es">Manzana</nombre>
     </owl:NamedIndividual>
     
 
@@ -8854,10 +8854,10 @@
         <requiereTecnica rdf:resource="http://www.semanticweb.org/ontologies/reposteria#TecnicaRefrigerado"/>
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Harina"/>
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
-        <idioma>español</idioma>
-        <nivelDificultad>Dificil</nivelDificultad>
-        <nombre>Masa Hojaldre</nombre>
-        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">120</tiempoPreparacion>
+        <idioma>Español</idioma>
+        <nivelDificultad xml:lang="es">Dificil</nivelDificultad>
+        <nombre xml:lang="es">Masa Hojaldre</nombre>
+        <tiempoPreparacion xml:lang="es">120</tiempoPreparacion>
     </owl:NamedIndividual>
     
 
@@ -8866,8 +8866,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#MoldeRedondo">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Molde"/>
-        <descripcion>Molde redondo de 20-24 cm</descripcion>
-        <nombre>Molde Redondo</nombre>
+        <descripcion xml:lang="es">Molde redondo de 20-24 cm</descripcion>
+        <nombre xml:lang="es">Molde Redondo</nombre>
     </owl:NamedIndividual>
     
 
@@ -8882,11 +8882,11 @@
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Chocolate"/>
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
-        <idioma>español</idioma>
-        <nivelDificultad>Medio</nivelDificultad>
-        <nombre>Mousse de Chocolate</nombre>
-        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</porciones>
-        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</tiempoPreparacion>
+        <idioma>Español</idioma>
+        <nivelDificultad xml:lang="es">Medio</nivelDificultad>
+        <nombre xml:lang="es">Mousse de Chocolate</nombre>
+        <porciones xml:lang="es">6</porciones>
+        <tiempoPreparacion xml:lang="es">20</tiempoPreparacion>
     </owl:NamedIndividual>
     
 
@@ -8895,8 +8895,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Naranja">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
-        <descripcion>Citrico para sabor</descripcion>
-        <nombre>Naranja</nombre>
+        <descripcion xml:lang="es">Citrico para sabor</descripcion>
+        <nombre xml:lang="es">Naranja</nombre>
     </owl:NamedIndividual>
     
 
@@ -8916,8 +8916,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Nueces">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
-        <descripcion>Fruto seco</descripcion>
-        <nombre>Nueces</nombre>
+        <descripcion xml:lang="es">Fruto seco</descripcion>
+        <nombre xml:lang="es">Nueces</nombre>
     </owl:NamedIndividual>
     
 
@@ -9628,30 +9628,30 @@
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Levadura"/>
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
-        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">22.0</azucarGramos>
-        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">250</calorias>
-        <color>Marrón dorado</color>
-        <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">5.50</costoAproximado>
-        <descripcion>Bizcocho humedo con platano maduro</descripcion>
-        <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esCongelable>
-        <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
-        <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
-        <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">9.5</grasaGramos>
-        <idioma>español</idioma>
-        <nivelDificultad>Facil</nivelDificultad>
-        <nombre>Pan de Platano</nombre>
-        <paisOrigen>Estados Unidos</paisOrigen>
-        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">900</peso>
-        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</porciones>
-        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</requiereRefrigeracion>
-        <sabor>Platano dulce</sabor>
-        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">175</temperatura>
-        <textura>Húmedo y esponjoso</textura>
-        <tiempoCoccion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">55</tiempoCoccion>
-        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</tiempoConservacion>
-        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">60</tiempoPreparacion>
-        <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneGluten>
-        <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneLactosa>
+        <azucarGramos xml:lang="es">22.0</azucarGramos>
+        <calorias xml:lang="es">250</calorias>
+        <color xml:lang="es">Marrón dorado</color>
+        <costoAproximado xml:lang="es">5.50</costoAproximado>
+        <descripcion xml:lang="es">Bizcocho humedo con platano maduro</descripcion>
+        <esCongelable xml:lang="es">true</esCongelable>
+        <esTradicional xml:lang="es">true</esTradicional>
+        <esVegano xml:lang="es">false</esVegano>
+        <grasaGramos xml:lang="es">9.5</grasaGramos>
+        <idioma>Español</idioma>
+        <nivelDificultad xml:lang="es">Facil</nivelDificultad>
+        <nombre xml:lang="es">Pan de Platano</nombre>
+        <paisOrigen xml:lang="es">Estados Unidos</paisOrigen>
+        <peso xml:lang="es">900</peso>
+        <porciones xml:lang="es">10</porciones>
+        <requiereRefrigeracion xml:lang="es">false</requiereRefrigeracion>
+        <sabor xml:lang="es">Platano dulce</sabor>
+        <temperatura xml:lang="es">175</temperatura>
+        <textura xml:lang="es">Húmedo y esponjoso</textura>
+        <tiempoCoccion xml:lang="es">55</tiempoCoccion>
+        <tiempoConservacion xml:lang="es">4</tiempoConservacion>
+        <tiempoPreparacion xml:lang="es">60</tiempoPreparacion>
+        <tieneGluten xml:lang="es">true</tieneGluten>
+        <tieneLactosa xml:lang="es">true</tieneLactosa>
     </owl:NamedIndividual>
     
 
@@ -9673,30 +9673,30 @@
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MoldeRedondo"/>
-        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">45.0</azucarGramos>
-        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">380</calorias>
-        <color>Marrón oscuro</color>
-        <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">14.00</costoAproximado>
-        <descripcion>Pastel de chocolate con cobertura brillante</descripcion>
-        <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esCongelable>
-        <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
-        <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
-        <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">18.0</grasaGramos>
-        <idioma>español</idioma>
-        <nivelDificultad>Medio</nivelDificultad>
-        <nombre>Pastel de Chocolate con Glaseado</nombre>
-        <paisOrigen>Alemania</paisOrigen>
-        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1400</peso>
-        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">12</porciones>
-        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</requiereRefrigeracion>
-        <sabor>Chocolate rico</sabor>
-        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">180</temperatura>
-        <textura>Esponjoso y húmedo</textura>
-        <tiempoCoccion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">45</tiempoCoccion>
-        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</tiempoConservacion>
-        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</tiempoPreparacion>
-        <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneGluten>
-        <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneLactosa>
+        <azucarGramos xml:lang="es">45.0</azucarGramos>
+        <calorias xml:lang="es">380</calorias>
+        <color xml:lang="es">Marrón oscuro</color>
+        <costoAproximado xml:lang="es">14.00</costoAproximado>
+        <descripcion xml:lang="es">Pastel de chocolate con cobertura brillante</descripcion>
+        <esCongelable xml:lang="es">true</esCongelable>
+        <esTradicional xml:lang="es">true</esTradicional>
+        <esVegano xml:lang="es">false</esVegano>
+        <grasaGramos xml:lang="es">18.0</grasaGramos>
+        <idioma>Español</idioma>
+        <nivelDificultad xml:lang="es">Medio</nivelDificultad>
+        <nombre xml:lang="es">Pastel de Chocolate con Glaseado</nombre>
+        <paisOrigen xml:lang="es">Alemania</paisOrigen>
+        <peso xml:lang="es">1400</peso>
+        <porciones xml:lang="es">12</porciones>
+        <requiereRefrigeracion xml:lang="es">false</requiereRefrigeracion>
+        <sabor xml:lang="es">Chocolate rico</sabor>
+        <temperatura xml:lang="es">180</temperatura>
+        <textura xml:lang="es">Esponjoso y húmedo</textura>
+        <tiempoCoccion xml:lang="es">45</tiempoCoccion>
+        <tiempoConservacion xml:lang="es">5</tiempoConservacion>
+        <tiempoPreparacion xml:lang="es">100</tiempoPreparacion>
+        <tieneGluten xml:lang="es">true</tieneGluten>
+        <tieneLactosa xml:lang="es">true</tieneLactosa>
     </owl:NamedIndividual>
     
 
@@ -9718,12 +9718,12 @@
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#HornoConvencional"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MoldeRedondo"/>
-        <idioma>español</idioma>
-        <nivelDificultad>Medio</nivelDificultad>
-        <nombre>Pastel de Vainilla</nombre>
-        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</porciones>
-        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">175</temperatura>
-        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90</tiempoPreparacion>
+        <idioma>Español</idioma>
+        <nivelDificultad xml:lang="es">Medio</nivelDificultad>
+        <nombre xml:lang="es">Pastel de Vainilla</nombre>
+        <porciones xml:lang="es">10</porciones>
+        <temperatura xml:lang="es">175</temperatura>
+        <tiempoPreparacion xml:lang="es">90</tiempoPreparacion>
     </owl:NamedIndividual>
     
 
@@ -9732,8 +9732,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Platano">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
-        <descripcion>Fruta madura para reposteria</descripcion>
-        <nombre>Platano</nombre>
+        <descripcion xml:lang="es">Fruta madura para reposteria</descripcion>
+        <nombre xml:lang="es">Platano</nombre>
     </owl:NamedIndividual>
     
 
@@ -9742,8 +9742,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#PolvoDeAlmendras">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
-        <descripcion>Almendras molidas finamente</descripcion>
-        <nombre>Polvo de Almendras</nombre>
+        <descripcion xml:lang="es">Almendras molidas finamente</descripcion>
+        <nombre xml:lang="es">Polvo de Almendras</nombre>
     </owl:NamedIndividual>
     
 
@@ -9752,8 +9752,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Queso">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Animal"/>
-        <descripcion>Queso crema tipo Philadelphia</descripcion>
-        <nombre>Queso Crema</nombre>
+        <descripcion xml:lang="es">Queso crema tipo Philadelphia</descripcion>
+        <nombre xml:lang="es">Queso Crema</nombre>
     </owl:NamedIndividual>
     
 
@@ -9772,30 +9772,30 @@
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MoldeRedondo"/>
-        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">42.0</azucarGramos>
-        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">340</calorias>
-        <color>Amarillo brillante</color>
-        <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">11.00</costoAproximado>
+        <azucarGramos xml:lang="es">42.0</azucarGramos>
+        <calorias xml:lang="es">340</calorias>
+        <color xml:lang="es">Amarillo brillante</color>
+        <costoAproximado xml:lang="es">11.00</costoAproximado>
         <descripcion xml:lang="es">Tarta citrica con merengue</descripcion>
-        <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esCongelable>
-        <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
-        <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
-        <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">15.0</grasaGramos>
-        <idioma xml:lang="es">Español</idioma>
-        <nivelDificultad>Medio</nivelDificultad>
-        <nombre>Tarta de Limon</nombre>
-        <paisOrigen>Reino Unido</paisOrigen>
-        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">850</peso>
-        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</porciones>
-        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</requiereRefrigeracion>
-        <sabor>Citrico y dulce</sabor>
-        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">170</temperatura>
-        <textura>Cremoso y crujiente</textura>
-        <tiempoCoccion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">35</tiempoCoccion>
-        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</tiempoConservacion>
-        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">75</tiempoPreparacion>
-        <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneGluten>
-        <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneLactosa>
+        <esCongelable xml:lang="es">false</esCongelable>
+        <esTradicional xml:lang="es">true</esTradicional>
+        <esVegano xml:lang="es">false</esVegano>
+        <grasaGramos xml:lang="es">15.0</grasaGramos>
+        <idioma>Español</idioma>
+        <nivelDificultad xml:lang="es">Medio</nivelDificultad>
+        <nombre xml:lang="es">Tarta de Limon</nombre>
+        <paisOrigen xml:lang="es">Reino Unido</paisOrigen>
+        <peso xml:lang="es">850</peso>
+        <porciones xml:lang="es">8</porciones>
+        <requiereRefrigeracion xml:lang="es">true</requiereRefrigeracion>
+        <sabor xml:lang="es">Citrico y dulce</sabor>
+        <temperatura xml:lang="es">170</temperatura>
+        <textura xml:lang="es">Cremoso y crujiente</textura>
+        <tiempoCoccion xml:lang="es">35</tiempoCoccion>
+        <tiempoConservacion xml:lang="es">4</tiempoConservacion>
+        <tiempoPreparacion xml:lang="es">75</tiempoPreparacion>
+        <tieneGluten xml:lang="es">true</tieneGluten>
+        <tieneLactosa xml:lang="es">true</tieneLactosa>
     </owl:NamedIndividual>
     
 
@@ -9812,30 +9812,30 @@
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Harina"/>
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Mantequilla"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#MoldeRedondo"/>
-        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">35.0</azucarGramos>
-        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">290</calorias>
-        <color>Dorado</color>
-        <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">9.00</costoAproximado>
-        <descripcion>Tarta clasica con manzanas y canela</descripcion>
-        <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esCongelable>
-        <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
-        <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
-        <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">12.0</grasaGramos>
+        <azucarGramos xml:lang="es">35.0</azucarGramos>
+        <calorias xml:lang="es">290</calorias>
+        <color xml:lang="es">Dorado</color>
+        <costoAproximado xml:lang="es">9.00</costoAproximado>
+        <descripcion xml:lang="es">Tarta clasica con manzanas y canela</descripcion>
+        <esCongelable xml:lang="es">true</esCongelable>
+        <esTradicional xml:lang="es">true</esTradicional>
+        <esVegano xml:lang="es">false</esVegano>
+        <grasaGramos xml:lang="es">12.0</grasaGramos>
         <idioma>Español</idioma>
-        <nivelDificultad>Medio</nivelDificultad>
-        <nombre>Tarta de Manzana</nombre>
-        <paisOrigen>Estados Unidos</paisOrigen>
-        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1100</peso>
-        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</porciones>
-        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</requiereRefrigeracion>
-        <sabor>Manzana con canela</sabor>
-        <temperatura rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">180</temperatura>
-        <textura>Crujiente y jugoso</textura>
-        <tiempoCoccion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">50</tiempoCoccion>
-        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</tiempoConservacion>
-        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">70</tiempoPreparacion>
-        <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneGluten>
-        <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneLactosa>
+        <nivelDificultad xml:lang="es">Medio</nivelDificultad>
+        <nombre xml:lang="es">Tarta de Manzana</nombre>
+        <paisOrigen xml:lang="es">Estados Unidos</paisOrigen>
+        <peso xml:lang="es">1100</peso>
+        <porciones xml:lang="es">8</porciones>
+        <requiereRefrigeracion xml:lang="es">false</requiereRefrigeracion>
+        <sabor xml:lang="es">Manzana con canela</sabor>
+        <temperatura xml:lang="es">180</temperatura>
+        <textura xml:lang="es">Crujiente y jugoso</textura>
+        <tiempoCoccion xml:lang="es">50</tiempoCoccion>
+        <tiempoConservacion xml:lang="es">3</tiempoConservacion>
+        <tiempoPreparacion xml:lang="es">70</tiempoPreparacion>
+        <tieneGluten xml:lang="es">true</tieneGluten>
+        <tieneLactosa xml:lang="es">true</tieneLactosa>
     </owl:NamedIndividual>
     
 
@@ -9844,9 +9844,9 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#TecnicaBatido">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Batido"/>
-        <descripcion>Mezclar ingredientes vigorosamente para incorporar aire</descripcion>
-        <nivelHabilidad>Basico</nivelHabilidad>
-        <nombre>Tecnica de Batido</nombre>
+        <descripcion xml:lang="es">Mezclar ingredientes vigorosamente para incorporar aire</descripcion>
+        <nivelHabilidad xml:lang="es">Basico</nivelHabilidad>
+        <nombre xml:lang="es">Tecnica de Batido</nombre>
     </owl:NamedIndividual>
     
 
@@ -9855,9 +9855,9 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#TecnicaGlaseado">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Glaseado"/>
-        <descripcion>Aplicacion de cobertura decorativa</descripcion>
-        <nivelHabilidad>Avanzado</nivelHabilidad>
-        <nombre>Tecnica de Glaseado</nombre>
+        <descripcion xml:lang="es">Aplicacion de cobertura decorativa</descripcion>
+        <nivelHabilidad xml:lang="es">Avanzado</nivelHabilidad>
+        <nombre xml:lang="es">Tecnica de Glaseado</nombre>
     </owl:NamedIndividual>
     
 
@@ -9866,9 +9866,9 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#TecnicaHorneado">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Horneado"/>
-        <descripcion>Coccion en horno a temperatura controlada</descripcion>
-        <nivelHabilidad>Intermedio</nivelHabilidad>
-        <nombre>Tecnica de Horneado</nombre>
+        <descripcion xml:lang="es">Coccion en horno a temperatura controlada</descripcion>
+        <nivelHabilidad xml:lang="es">Intermedio</nivelHabilidad>
+        <nombre xml:lang="es">Tecnica de Horneado</nombre>
     </owl:NamedIndividual>
     
 
@@ -9895,29 +9895,29 @@
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Cafe"/>
         <tieneIngrediente rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Huevo"/>
         <usaHerramienta rdf:resource="http://www.semanticweb.org/ontologies/reposteria#BatidoraElectrica"/>
-        <azucarGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">24.0</azucarGramos>
-        <calorias rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">310</calorias>
-        <color>Marrón claro</color>
-        <costoAproximado rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">15.00</costoAproximado>
-        <descripcion>Postre italiano con cafe y mascarpone</descripcion>
-        <esCongelable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esCongelable>
-        <esTradicional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</esTradicional>
-        <esVegano rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</esVegano>
-        <grasaGramos rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">18.5</grasaGramos>
-        <idioma>español</idioma>
-        <nivelDificultad>Medio</nivelDificultad>
-        <nombre>Tiramisú</nombre>
-        <paisOrigen>Italia</paisOrigen>
-        <peso rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1000</peso>
-        <porciones rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</porciones>
-        <requiereRefrigeracion rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</requiereRefrigeracion>
-        <sabor>Cafe y cacao</sabor>
-        <textura>Cremoso</textura>
-        <tiempoConservacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</tiempoConservacion>
-        <tiempoPreparacion rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">40</tiempoPreparacion>
-        <tiempoReposo rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">360</tiempoReposo>
-        <tieneGluten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneGluten>
-        <tieneLactosa rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</tieneLactosa>
+        <azucarGramos xml:lang="es">24.0</azucarGramos>
+        <calorias xml:lang="es">310</calorias>
+        <color xml:lang="es">Marrón claro</color>
+        <costoAproximado xml:lang="es">15.00</costoAproximado>
+        <descripcion xml:lang="es">Postre italiano con cafe y mascarpone</descripcion>
+        <esCongelable xml:lang="es">false</esCongelable>
+        <esTradicional xml:lang="es">true</esTradicional>
+        <esVegano xml:lang="es">false</esVegano>
+        <grasaGramos xml:lang="es">18.5</grasaGramos>
+        <idioma>Español</idioma>
+        <nivelDificultad xml:lang="es">Medio</nivelDificultad>
+        <nombre xml:lang="es">Tiramisú</nombre>
+        <paisOrigen xml:lang="es">Italia</paisOrigen>
+        <peso xml:lang="es">1000</peso>
+        <porciones xml:lang="es">8</porciones>
+        <requiereRefrigeracion xml:lang="es">true</requiereRefrigeracion>
+        <sabor xml:lang="es">Cafe y cacao</sabor>
+        <textura xml:lang="es">Cremoso</textura>
+        <tiempoConservacion xml:lang="es">3</tiempoConservacion>
+        <tiempoPreparacion xml:lang="es">40</tiempoPreparacion>
+        <tiempoReposo xml:lang="es">360</tiempoReposo>
+        <tieneGluten xml:lang="es">true</tieneGluten>
+        <tieneLactosa xml:lang="es">true</tieneLactosa>
     </owl:NamedIndividual>
     
 
@@ -9942,8 +9942,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Vainilla">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
-        <descripcion>Extracto natural de vainilla</descripcion>
-        <nombre>Vainilla</nombre>
+        <descripcion xml:lang="es">Extracto natural de vainilla</descripcion>
+        <nombre xml:lang="es">Vainilla</nombre>
     </owl:NamedIndividual>
     
 
@@ -9952,8 +9952,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Yogur">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Animal"/>
-        <descripcion>Para humedad en bizcochos</descripcion>
-        <nombre>Yogur Natural</nombre>
+        <descripcion xml:lang="es">Para humedad en bizcochos</descripcion>
+        <nombre xml:lang="es">Yogur Natural</nombre>
     </owl:NamedIndividual>
     
 
@@ -9962,8 +9962,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/ontologies/reposteria#Zanahoria">
         <rdf:type rdf:resource="http://www.semanticweb.org/ontologies/reposteria#Vegetal"/>
-        <descripcion>Rallada para pasteles</descripcion>
-        <nombre>Zanahoria</nombre>
+        <descripcion xml:lang="es">Rallada para pasteles</descripcion>
+        <nombre xml:lang="es">Zanahoria</nombre>
     </owl:NamedIndividual>
 </rdf:RDF>
 

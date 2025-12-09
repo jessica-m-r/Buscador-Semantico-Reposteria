@@ -635,3 +635,56 @@ ul li::before {
     font-size: 1.1em;
     line-height: 1.6;
 }
+/* Botón "Cargar más" */
+.load-more-container {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.load-more-btn {
+    background: linear-gradient(135deg, #8B7355 0%, #6B5745 100%);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1em;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(139, 115, 85, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.load-more-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 115, 85, 0.4);
+}
+
+.load-more-btn:active {
+    transform: translateY(0);
+}
+
+.load-more-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Spinner pequeño para el botón */
+.spinner-small {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}

@@ -461,10 +461,16 @@ DESSERT_KEYWORDS = {
     'fr': ['gâteau', 'tarte', 'biscuit', 'dessert', 'chocolat', 'mousse', 'pâtisserie', 'glace', 'crème']
 }
 
-def search_dbpedia_food(term, language='es'):
+def search_dbpedia_food(term, language='es', limit=3, offset=0):
     """
     Búsqueda en DBpedia usando estrategia híbrida CORREGIDA
     Solo funciona para idiomas habilitados: español, inglés y francés
+    
+    Args:
+        term: término de búsqueda
+        language: idioma de búsqueda
+        limit: número de resultados a retornar
+        offset: número de resultados a saltar (para paginación)
     """
     # VERIFICAR SI EL IDIOMA ESTÁ HABILITADO PARA DBPEDIA
     if language not in DBPEDIA_ENABLED_LANGUAGES:
@@ -480,22 +486,30 @@ def search_dbpedia_food(term, language='es'):
     
     # Búsqueda normal solo para idiomas permitidos
     print(f"  → Intentando en {language}.dbpedia.org...")
-    results = _search_in_endpoint(tokens, language, language)
+    results = _search_in_endpoint(tokens, language, language, limit, offset)
     
     # Solo si NO hay resultados, intentar en el endpoint principal
     if len(results) == 0 and language != 'en':
         print(f"  → No se encontraron resultados en {language}.dbpedia.org")
         print(f"  → Buscando en dbpedia.org con etiquetas en {language}...")
-        results = _search_in_endpoint(tokens, language, 'en', search_in_main=True)
+        results = _search_in_endpoint(tokens, language, 'en', limit, offset, search_in_main=True)
     else:
         print(f"  ✓ Encontrados {len(results)} resultados en {language}.dbpedia.org")
     
     return results
 
 
-def _search_in_endpoint(tokens, display_language, endpoint_language, search_in_main=False):
+def _search_in_endpoint(tokens, display_language, endpoint_language, limit=3, offset=0, search_in_main=False):
     """
     Función auxiliar para buscar en un endpoint específico - VERSIÓN CORREGIDA
+    
+    Args:
+        tokens: lista de palabras clave de búsqueda
+        display_language: idioma para mostrar resultados
+        endpoint_language: idioma del endpoint a consultar
+        limit: número de resultados a retornar
+        offset: número de resultados a saltar
+        search_in_main: si True, busca en endpoint principal con etiquetas en display_language
     """
     if search_in_main:
         endpoint = DBPEDIA_ENDPOINTS['en']
@@ -539,25 +553,51 @@ def _search_in_endpoint(tokens, display_language, endpoint_language, search_in_m
             ingredient_props = ['ingredients', 'ingredient']
         
         # CONSULTA SIMPLIFICADA Y OPTIMIZADA
+        # Para inglés, filtrar solo por comida usando clases de DBpedia
+        if endpoint_language == 'en':
+            food_filter = """
+            # Filtrar solo recursos relacionados con comida
+            ?item a ?type .
+            FILTER(
+                ?type = dbo:Food || 
+                ?type = dbo:Dessert ||
+                ?type = <http://dbpedia.org/class/yago/Dessert107609840> ||
+                ?type = <http://dbpedia.org/class/yago/BakedGoods107622061> ||
+                ?type = <http://dbpedia.org/class/yago/Cake107628005> ||
+                ?type = <http://dbpedia.org/class/yago/Cookie107655392> ||
+                ?type = <http://dbpedia.org/class/yago/Pastry107622826>
+            )
+            """
+        else:
+            food_filter = ""
+        
         query = f"""
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         PREFIX dbo: <http://dbpedia.org/ontology/>
         PREFIX dbp: <{prop_prefix}>
         
-        SELECT DISTINCT ?item ?label ?thumbnail ?desc
+        SELECT DISTINCT ?item ?label ?thumbnail ?abstract ?description
         WHERE {{
             ?item rdfs:label ?label .
             FILTER(LANG(?label) = "{label_lang}")
             FILTER({filter_conditions})
             
+            {food_filter}
+            
             OPTIONAL {{ ?item dbo:thumbnail ?thumbnail . }}
             
             OPTIONAL {{
-                ?item dbo:abstract ?desc .
-                FILTER(LANG(?desc) = "{label_lang}")
+                ?item dbo:abstract ?abstract .
+                FILTER(LANG(?abstract) = "{label_lang}")
+            }}
+            
+            OPTIONAL {{
+                ?item dbo:description ?description .
+                FILTER(LANG(?description) = "{label_lang}")
             }}
         }}
-        LIMIT 5
+        LIMIT {limit}
+        OFFSET {offset}
         """
         
         print(f"\n=== Buscando en {endpoint_name}: {' '.join(tokens)} ===")
@@ -583,9 +623,14 @@ def _search_in_endpoint(tokens, display_language, endpoint_language, search_in_m
             
             print(f"  • {label}")
             
-            # Descripción
-            abstract = result.get("desc", {}).get("value", "")
+            # Descripción - intentar abstract primero, luego description
+            abstract = result.get("abstract", {}).get("value", "")
             
+            # Si no hay abstract, intentar con description
+            if not abstract:
+                abstract = result.get("description", {}).get("value", "")
+            
+            # Truncar si es muy largo
             if abstract and len(abstract) > 300:
                 abstract = abstract[:297] + "..."
             elif not abstract:
@@ -701,6 +746,8 @@ def index():
 def dbpedia_search():
     term = request.json.get("term", "").strip()
     language = request.json.get("language", "es")
+    limit = request.json.get("limit", 3)
+    offset = request.json.get("offset", 0)
     
     # Verificar si el idioma está habilitado para DBpedia
     if language not in DBPEDIA_ENABLED_LANGUAGES:
@@ -711,9 +758,14 @@ def dbpedia_search():
         })
     
     if term:
-        dbpedia_results = search_dbpedia_food(term, language)
-        return jsonify(dbpedia_results)
-    return jsonify([])
+        dbpedia_results = search_dbpedia_food(term, language, limit, offset)
+        return jsonify({
+            "results": dbpedia_results,
+            "has_more": len(dbpedia_results) == limit,
+            "offset": offset,
+            "limit": limit
+        })
+    return jsonify({"results": [], "has_more": False})
 
 if __name__ == "__main__":
     app.run(debug=True)

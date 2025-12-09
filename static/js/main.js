@@ -47,7 +47,9 @@ const translations = {
         waitingSearch: 'Esperando búsqueda...',
         dbpediaNotAvailable: 'DBpedia no está disponible para este idioma',
         dbpediaOnlyAvailable: 'DBpedia solo está disponible en: Español, English y Français',
-        dbpediaDisabled: 'No disponible'
+        dbpediaDisabled: 'No disponible',
+        loadMore: 'Cargar más resultados',
+        loading: 'Cargando'
     },
     'en': {
         title: 'Bakery Search Engine',
@@ -90,7 +92,9 @@ const translations = {
         waitingSearch: 'Waiting for search...',
         dbpediaNotAvailable: 'DBpedia is not available for this language',
         dbpediaOnlyAvailable: 'DBpedia is only available in: Español, English and Français',
-        dbpediaDisabled: 'Not available'
+        dbpediaDisabled: 'Not available',
+        loadMore: 'Load more results',
+        loading: 'Loading'
     },
     'fr': {
         title: 'Moteur de Recherche de Pâtisserie',
@@ -133,7 +137,9 @@ const translations = {
         waitingSearch: 'En attente de recherche...',
         dbpediaNotAvailable: 'DBpedia n\'est pas disponible pour cette langue',
         dbpediaOnlyAvailable: 'DBpedia est uniquement disponible en: Español, English et Français',
-        dbpediaDisabled: 'Non disponible'
+        dbpediaDisabled: 'Non disponible',
+        loadMore: 'Charger plus de résultats',
+        loading: 'Chargement'
     },
     'it': {
         title: 'Motore di Ricerca di Pasticceria',
@@ -176,7 +182,9 @@ const translations = {
         waitingSearch: 'In attesa di ricerca...',
         dbpediaNotAvailable: 'DBpedia non è disponibile per questa lingua',
         dbpediaOnlyAvailable: 'DBpedia è disponibile solo in: Español, English e Français',
-        dbpediaDisabled: 'Non disponibile'
+        dbpediaDisabled: 'Non disponibile',
+        loadMore: 'Carica più risultati',
+        loading: 'Caricamento'
     },
     'de': {
         title: 'Backwaren-Suchmaschine',
@@ -219,7 +227,9 @@ const translations = {
         waitingSearch: 'Warten auf Suche...',
         dbpediaNotAvailable: 'DBpedia ist für diese Sprache nicht verfügbar',
         dbpediaOnlyAvailable: 'DBpedia ist nur verfügbar in: Español, English und Français',
-        dbpediaDisabled: 'Nicht verfügbar'
+        dbpediaDisabled: 'Nicht verfügbar',
+        loadMore: 'Weitere Ergebnisse laden',
+        loading: 'Laden'
     },
     'pt': {
         title: 'Motor de Busca de Confeitaria',
@@ -262,7 +272,9 @@ const translations = {
         waitingSearch: 'Aguardando pesquisa...',
         dbpediaNotAvailable: 'DBpedia não está disponível para este idioma',
         dbpediaOnlyAvailable: 'DBpedia está disponível apenas em: Español, English e Français',
-        dbpediaDisabled: 'Não disponível'
+        dbpediaDisabled: 'Não disponível',
+        loadMore: 'Carregar mais resultados',
+        loading: 'Carregando'
     }
 };
 
@@ -334,9 +346,19 @@ function initTabs() {
 }
 
 // ==================== CARGAR RESULTADOS DE DBPEDIA ====================
-function loadDBpediaResults(term, language) {
+let currentOffset = 0;
+let currentSearchTerm = '';
+let isLoadingMore = false;
+
+function loadDBpediaResults(term, language, append = false) {
     const container = document.getElementById('dbpedia-results-grid');
     const countElement = document.getElementById('dbpedia-count');
+    
+    // Si es una nueva búsqueda, resetear offset
+    if (!append) {
+        currentOffset = 0;
+        currentSearchTerm = term;
+    }
     
     // Verificar si DBpedia está habilitado para este idioma
     if (!isDBpediaEnabled(language)) {
@@ -364,17 +386,28 @@ function loadDBpediaResults(term, language) {
     }
 
     // Mostrar loading
-    container.innerHTML = `
-        <div class="loading-container active">
-            <div class="spinner"></div>
-            <div class="loading-text">
-                ${t('searching', language)}<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
+    if (!append) {
+        container.innerHTML = `
+            <div class="loading-container active">
+                <div class="spinner"></div>
+                <div class="loading-text">
+                    ${t('searching', language)}<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
+                </div>
+                <div class="loading-subtext">
+                    ${t('pleaseWait', language)}
+                </div>
             </div>
-            <div class="loading-subtext">
-                ${t('pleaseWait', language)}
-            </div>
-        </div>
-    `;
+        `;
+    } else {
+        // Mostrar loading en el botón
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        if (loadMoreBtn) {
+            loadMoreBtn.disabled = true;
+            loadMoreBtn.innerHTML = `<span class="spinner-small"></span> ${t('loading', language)}...`;
+        }
+    }
+
+    isLoadingMore = true;
 
     // Realizar búsqueda en DBpedia con el idioma seleccionado
     fetch("/dbpedia_search", {
@@ -384,11 +417,15 @@ function loadDBpediaResults(term, language) {
         },
         body: JSON.stringify({ 
             term: term,
-            language: language 
+            language: language,
+            limit: 3,
+            offset: currentOffset
         })
     })
     .then(res => res.json())
     .then(data => {
+        isLoadingMore = false;
+        
         // Verificar si hay error por idioma no habilitado
         if (data.error === 'dbpedia_disabled') {
             container.innerHTML = `
@@ -404,9 +441,20 @@ function loadDBpediaResults(term, language) {
             return;
         }
         
-        container.innerHTML = '';
+        const results = data.results || [];
         
-        if (!data || data.length === 0) {
+        // Si no estamos agregando, limpiar contenedor
+        if (!append) {
+            container.innerHTML = '';
+        } else {
+            // Remover el botón "Cargar más" si existe
+            const oldBtn = document.getElementById('loadMoreBtn');
+            if (oldBtn) {
+                oldBtn.remove();
+            }
+        }
+        
+        if (results.length === 0 && !append) {
             container.innerHTML = `
                 <div class="no-results">
                     🔍 ${t('noResults', language)}
@@ -417,23 +465,55 @@ function loadDBpediaResults(term, language) {
         }
 
         // Actualizar contador
-        countElement.textContent = `${data.length} ${t('resultsCount', language)}`;
+        const totalShown = currentOffset + results.length;
+        countElement.textContent = `${totalShown}+ ${t('resultsCount', language)}`;
 
         // Crear tarjetas de resultados
-        data.forEach(item => {
+        results.forEach(item => {
             const card = createDBpediaCard(item, language);
             container.appendChild(card);
         });
+        
+        // Incrementar offset para la próxima carga
+        currentOffset += results.length;
+        
+        // Agregar botón "Cargar más" si hay más resultados
+        if (data.has_more) {
+            const loadMoreBtn = document.createElement('div');
+            loadMoreBtn.className = 'load-more-container';
+            loadMoreBtn.innerHTML = `
+                <button id="loadMoreBtn" class="load-more-btn">
+                    ${t('loadMore', language)}
+                </button>
+            `;
+            container.appendChild(loadMoreBtn);
+            
+            // Agregar evento al botón
+            document.getElementById('loadMoreBtn').addEventListener('click', () => {
+                loadDBpediaResults(currentSearchTerm, language, true);
+            });
+        }
     })
     .catch(err => {
         console.error('Error consultando DBpedia:', err);
-        container.innerHTML = `
-            <div class="no-results">
-                ❌ ${t('error', language)}
-                <br><small style="font-size: 0.7em; color: #B8AFA5;">${t('tryAgain', language)}</small>
-            </div>
-        `;
-        countElement.textContent = 'Error';
+        isLoadingMore = false;
+        
+        if (!append) {
+            container.innerHTML = `
+                <div class="no-results">
+                    ❌ ${t('error', language)}
+                    <br><small style="font-size: 0.7em; color: #B8AFA5;">${t('tryAgain', language)}</small>
+                </div>
+            `;
+            countElement.textContent = 'Error';
+        } else {
+            // Restaurar botón en caso de error
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            if (loadMoreBtn) {
+                loadMoreBtn.disabled = false;
+                loadMoreBtn.innerHTML = t('loadMore', language);
+            }
+        }
     });
 }
 
